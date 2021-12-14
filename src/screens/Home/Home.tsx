@@ -3,9 +3,10 @@ import { Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
-import Workouts from "../Workouts";
 import Profile from "../Profile";
 import theme from "../../theme";
+import Journal from "../Journal";
+import WorkoutHome from "../WorkoutHome";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,10 +17,12 @@ const Home = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "Workout") {
+          if (route.name === "WorkoutHome") {
             iconName = focused ? "barbell" : "barbell-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
+          } else if (route.name === "Journal") {
+            iconName = focused ? "book" : "book-outline";
           }
 
           // You can return any component that you like here!
@@ -30,8 +33,13 @@ const Home = () => {
       })}
     >
       <Tab.Screen
-        name="Workout"
-        component={Workouts}
+        name="Journal"
+        component={Journal}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="WorkoutHome"
+        component={WorkoutHome}
         options={{ headerShown: false }}
       />
       <Tab.Screen

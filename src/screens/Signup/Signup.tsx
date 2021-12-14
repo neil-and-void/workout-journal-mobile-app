@@ -1,15 +1,17 @@
 import React, { useState } from "react";
+import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
   Pressable,
-} from "react-native";
+  KeyboardAvoidingView,
+  Box,
+  Input,
+  FormControl,
+  Button,
+  VStack,
+  Text,
+  Flex,
+} from "native-base";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import theme from "../../theme";
 
 interface SignupErrors {
   email?: string;
@@ -21,10 +23,11 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<null | SignupErrors>(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState<null | SignupErrors>(null);
 
   const signup = () => {
-    console.log(email, name, password);
+    console.log(email, name, password, confirmPassword);
     navigation.navigate("Home");
   };
 
@@ -33,101 +36,79 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
   };
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Text style={styles.title}>Workout Journal</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <Box p={2} safeArea>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <VStack>
+            <Text fontSize={32} pb={8} fontWeight="bold">
+              Workout Journal
+            </Text>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={setEmail}
-            placeholder="Email"
-          />
-          {error?.email ? (
-            <Text style={styles.error}>{error.email}</Text>
-          ) : null}
-        </View>
+            <FormControl isRequired>
+              <Box pb={3}>
+                <FormControl.Label>Email</FormControl.Label>
+                <Input
+                  size="xl"
+                  p={4}
+                  variant="rounded"
+                  placeholder="Email"
+                  onChangeText={setEmail}
+                />
+              </Box>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Name</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={setName}
-            placeholder="Name"
-          />
-          {error?.name ? <Text style={styles.error}>{error.name}</Text> : null}
-        </View>
+              <Box pb={3}>
+                <FormControl.Label>Name</FormControl.Label>
+                <Input
+                  size="xl"
+                  p={4}
+                  variant="rounded"
+                  placeholder="Name"
+                  onChangeText={setName}
+                />
+              </Box>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={setPassword}
-            placeholder="Password"
-          />
-          {error?.password ? (
-            <Text style={styles.error}>{error.password}</Text>
-          ) : null}
-        </View>
+              <Box pb={6}>
+                <FormControl.Label>Password</FormControl.Label>
+                <Input
+                  size="xl"
+                  p={4}
+                  variant="rounded"
+                  placeholder="Password"
+                  onChangeText={setPassword}
+                />
+              </Box>
 
-        <TouchableOpacity onPress={signup} style={styles.button}>
-          <Text style={styles.buttonText}>Signup</Text>
-        </TouchableOpacity>
+              <Box pb={6}>
+                <FormControl.Label>Confirm Password</FormControl.Label>
+                <Input
+                  size="xl"
+                  p={4}
+                  variant="rounded"
+                  placeholder="Password"
+                  onChangeText={setConfirmPassword}
+                />
+              </Box>
+            </FormControl>
 
-        <Pressable onPress={navigateToLogin}>
-          <Text style={styles.navigateButton}>Login</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+            <Button size="lg" py={2} onPress={signup}>
+              Signup
+            </Button>
+
+            <Flex flexDirection="row" justify="center">
+              <Pressable p={4} onPress={navigateToLogin}>
+                <Text underline fontSize={16}>
+                  Login
+                </Text>
+              </Pressable>
+            </Flex>
+          </VStack>
+        </TouchableWithoutFeedback>
+      </Box>
+    </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    alignContent: "center",
-    fontWeight: "600",
-    fontSize: 36,
-    paddingBottom: 24,
-    paddingTop: 24,
-  },
-  navigateButton: {
-    paddingTop: 16,
-    paddingBottom: 16,
-    textAlign: "center",
-    fontSize: 18,
-    textDecorationLine: "underline",
-  },
-  container: {
-    padding: 8,
-    height: "100%",
-  },
-  label: {
-    fontWeight: "600",
-  },
-  textInput: {
-    backgroundColor: theme.inputBgColor,
-    padding: 20,
-    fontSize: 18,
-    borderRadius: theme.borderRadius,
-  },
-  inputContainer: {
-    marginBottom: 16,
-  },
-  button: {
-    alignItems: "center",
-    padding: 10,
-    borderRadius: theme.borderRadius,
-    backgroundColor: theme.primaryColor,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "500",
-  },
-  error: {
-    color: "red",
-  },
-});
 
 export default Signup;
