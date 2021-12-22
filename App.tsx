@@ -43,7 +43,7 @@ export default function App() {
               options={{ headerShown: false }}
             />
           </Stack.Group>
-          <Stack.Group screenOptions={{ presentation: "modal" }}>
+          <Stack.Group>
             <Stack.Screen
               name="NewWorkoutTemplateFlow"
               component={NewWorkoutTemplateFlow}

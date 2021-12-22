@@ -1,34 +1,24 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, Text, TextInput, StyleSheet } from "react-native";
+import { Box, Input, Text } from "native-base";
 
 const NewWorkoutTemplate = () => {
   const [workoutName, setWorkoutName] = useState("");
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Text style={styles.title}>Workout Name</Text>
-        <TextInput
-          style={styles.workoutNameInput}
-          placeholder="Leg day, cardio..."
+    <Box px={6} pt={8}>
+      <Box alignItems="center">
+        <Text fontSize={32} fontWeight={600}>
+          Workout Name
+        </Text>
+        <Input
+          onChangeText={setWorkoutName}
+          fontSize={24}
+          placeholder="Legs, chest..."
+          variant="unstyled"
         />
-      </View>
-    </SafeAreaView>
+      </Box>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 128,
-    alignItems: "center",
-  },
-  title: {
-    textAlign: "left",
-    fontWeight: "600",
-  },
-  workoutNameInput: {
-    fontSize: 32,
-  },
-});
 
 export default NewWorkoutTemplate;

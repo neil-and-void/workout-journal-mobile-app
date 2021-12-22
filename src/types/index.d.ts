@@ -10,3 +10,9 @@ interface Signup {
   password: string;
   confirmPassword: string;
 }
+
+interface Exercise {
+  name: string;
+  reps: number;
+  sets: number;
+}

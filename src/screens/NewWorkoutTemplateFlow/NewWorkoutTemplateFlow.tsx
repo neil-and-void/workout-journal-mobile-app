@@ -57,7 +57,9 @@ const NewWorkoutTemplateFlow = () => {
             <Button
               variant="unstyled"
               color={theme.primaryColor}
-              onPress={() => alert("This is a button!")}
+              onPress={() =>
+                navigation.navigate("Home", { screen: "WorkoutHome" })
+              }
               _text={{ color: "primary.500", fontSize: 18, fontWeight: 400 }}
             >
               Create

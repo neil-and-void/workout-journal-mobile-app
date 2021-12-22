@@ -11,8 +11,8 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
   };
 
   return (
-    <Box p={2} safeArea>
-      <VStack>
+    <Box p={2} h="100%" safeArea>
+      <VStack h="100%">
         <HStack justifyContent="space-between" alignItems="center">
           <Text fontWeight={700} fontSize={48}>
             Workouts
@@ -26,20 +26,22 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
             New +
           </Button>
         </HStack>
-        <ScrollView>
-          <VStack mb={16}>
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-            <WorkoutTemplate />
-          </VStack>
+        <ScrollView
+          _contentContainerStyle={{
+            h: "100%",
+          }}
+        >
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
+          <WorkoutTemplate />
         </ScrollView>
       </VStack>
     </Box>
