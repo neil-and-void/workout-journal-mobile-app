@@ -12,6 +12,9 @@ import {
   Flex,
 } from "native-base";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import * as SecureStore from "expo-secure-store";
+
+import { signup } from "../../services/auth";
 
 interface SignupErrors {
   email?: string;
@@ -26,9 +29,15 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<null | SignupErrors>(null);
 
-  const signup = () => {
-    console.log(email, name, password, confirmPassword);
-    navigation.navigate("Home");
+  const submit = async () => {
+    try {
+      const tokens = await signup({ email, name, password, confirmPassword });
+      await SecureStore.setItemAsync("access_token", tokens.access_token);
+      await SecureStore.setItemAsync("refresh_token", tokens.refresh_token);
+      navigation.navigate("Home");
+    } catch (error) {
+      console.log("something went wrong");
+    }
   };
 
   const navigateToLogin = () => {
@@ -56,6 +65,7 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
                   variant="rounded"
                   placeholder="Email"
                   onChangeText={setEmail}
+                  autoCapitalize="none"
                 />
               </Box>
 
@@ -78,6 +88,7 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
                   variant="rounded"
                   placeholder="Password"
                   onChangeText={setPassword}
+                  autoCapitalize="none"
                 />
               </Box>
 
@@ -89,11 +100,12 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
                   variant="rounded"
                   placeholder="Password"
                   onChangeText={setConfirmPassword}
+                  autoCapitalize="none"
                 />
               </Box>
             </FormControl>
 
-            <Button size="lg" py={2} onPress={signup}>
+            <Button size="lg" py={2} onPress={submit}>
               Signup
             </Button>
 

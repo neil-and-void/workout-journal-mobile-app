@@ -16,6 +16,7 @@ import {
 } from "native-base";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import theme from "../../theme";
+import { login } from "../../services/auth";
 
 interface LoginErrors {
   password?: string;
@@ -28,9 +29,18 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<null | LoginErrors>(null);
 
-  const login = () => {
-    validate();
-    navigation.navigate("Home");
+  const submit = async () => {
+    try {
+      validate();
+      const tokens = await login({
+        email,
+        password,
+      });
+      console.log(tokens);
+      navigation.navigate("Home");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const navigateToSignup = () => {
@@ -56,6 +66,7 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
                 variant="rounded"
                 placeholder="Email"
                 onChangeText={setEmail}
+                autoCapitalize="none"
               />
             </Box>
 
@@ -67,11 +78,12 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
                 variant="rounded"
                 placeholder="Password"
                 onChangeText={setPassword}
+                autoCapitalize="none"
               />
             </Box>
           </FormControl>
 
-          <Button size="lg" py={2} onPress={login}>
+          <Button size="lg" py={2} onPress={submit}>
             Login
           </Button>
 

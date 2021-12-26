@@ -1,5 +1,5 @@
-import "react-native-gesture-handler";
-import React from "react";
+import "react-native-gesture-handler"; // needs to be at the top
+import React, { useEffect, useState } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Signup from "./src/screens/Signup";
@@ -9,6 +9,7 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import { StatusBar } from "expo-status-bar";
 import NewWorkoutTemplateFlow from "./src/screens/NewWorkoutTemplateFlow";
 import { theme } from "./src/theme";
+import * as SecureStore from "expo-secure-store";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,39 @@ const Theme = {
 };
 
 export default function App() {
+  const [user, setUser] = useState<User>({
+    signedIn: false,
+    refreshToken: null,
+    authToken: null,
+  });
+
+  useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      let authToken;
+      let refreshToken;
+
+      authToken = await SecureStore.getItemAsync("authtoken");
+      refreshToken = await SecureStore.getItemAsync("refreshToken");
+
+      if (authToken === null || refreshToken === null) {
+        setUser({
+          signedIn: true,
+          refreshToken: null,
+          authToken: null,
+        });
+      } else {
+        setUser({
+          signedIn: true,
+          refreshToken: refreshToken,
+          authToken: authToken,
+        });
+      }
+    };
+
+    bootstrapAsync();
+  }, []);
+
   return (
     <NativeBaseProvider theme={extendTheme(theme)}>
       <StatusBar style="dark" />
@@ -37,6 +71,7 @@ export default function App() {
               component={Login}
               options={{ headerShown: false }}
             />
+
             <Stack.Screen
               name="Home"
               component={Home}
