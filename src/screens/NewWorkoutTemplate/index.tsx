@@ -1,1 +1,1 @@
-export { default } from "./NewWorkoutTemplate";
+export { default } from './NewWorkoutTemplateName';

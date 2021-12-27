@@ -1,26 +1,31 @@
-import React from "react";
-import { Text, View, SafeAreaView, StyleSheet } from "react-native";
-import theme from "../../theme";
+import React, { useContext } from 'react';
+import { Button, Box, Text } from 'native-base';
+import UserContext from '../../contexts/userContext';
+import theme from '../../theme';
 
 const Profile = () => {
+  const { setUserData } = useContext(UserContext);
+
+  const logout = () => {
+    setUserData({
+      signedOut: true,
+      accessToken: null,
+      refreshToken: null,
+    });
+  };
+
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Text style={styles.title}>Profile</Text>
-      </View>
-    </SafeAreaView>
+    <Box p={2} safeArea>
+      <Box>
+        <Text fontSize={48} fontWeight={700}>
+          Journal
+        </Text>
+      </Box>
+      <Box>
+        <Button onPress={() => logout()}>Logout</Button>
+      </Box>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: theme.titleFontSize,
-    fontWeight: theme.titleFontWeight,
-  },
-  container: {
-    paddingLeft: 8,
-    paddingRight: 8,
-  },
-});
 
 export default Profile;

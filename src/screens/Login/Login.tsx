@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-import {
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
+import React, { useContext, useState } from 'react';
+import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import {
   Pressable,
   Box,
@@ -13,51 +9,51 @@ import {
   VStack,
   Text,
   Flex,
-} from "native-base";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import theme from "../../theme";
-import { login } from "../../services/auth";
-
-interface LoginErrors {
-  password?: string;
-  email?: string;
-}
+} from 'native-base';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { login } from '../../services/auth';
+import UserContext from '../../contexts/userContext';
 
 const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [formData, setData] = useState({});
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<null | LoginErrors>(null);
+  const [formData, setData] = useState<LoginCredentials>({
+    email: '',
+    password: '',
+  });
+  const { setUserData } = useContext(UserContext);
+  const [error, setError] = useState<null | string>(null);
 
+  /**
+   *
+   */
   const submit = async () => {
     try {
-      validate();
-      const tokens = await login({
-        email,
-        password,
+      const { access_token, refresh_token } = await login(formData);
+      setUserData({
+        accessToken: access_token,
+        refreshToken: refresh_token,
+        signedOut: false,
       });
-      console.log(tokens);
-      navigation.navigate("Home");
+      navigation.navigate('Home');
     } catch (err) {
-      console.log(err);
+      if (err.response) {
+        setError(err.response.data.error);
+      } else {
+        setError('Something went wrong');
+      }
     }
   };
-
-  const navigateToSignup = () => {
-    navigation.navigate("Signup");
-  };
-
-  const validate = () => {};
 
   return (
     <Box p={2} safeArea>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <VStack>
-          <Text fontSize={32} pb={8} fontWeight="bold">
-            Workout Journal
-          </Text>
+          <FormControl>
+            <Text fontSize={32} pb={8} fontWeight="bold">
+              Workout Journal
+            </Text>
 
-          <FormControl isRequired>
+            <Text color="red.500">{error}</Text>
+
             <Box pb={3}>
               <FormControl.Label>Email</FormControl.Label>
               <Input
@@ -65,7 +61,7 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
                 p={4}
                 variant="rounded"
                 placeholder="Email"
-                onChangeText={setEmail}
+                onChangeText={(text) => setData({ ...formData, email: text })}
                 autoCapitalize="none"
               />
             </Box>
@@ -77,7 +73,9 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
                 p={4}
                 variant="rounded"
                 placeholder="Password"
-                onChangeText={setPassword}
+                onChangeText={(text) =>
+                  setData({ ...formData, password: text })
+                }
                 autoCapitalize="none"
               />
             </Box>
@@ -88,7 +86,7 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
           </Button>
 
           <Flex flexDirection="row" justify="center">
-            <Pressable p={4} onPress={navigateToSignup}>
+            <Pressable p={4} onPress={() => navigation.navigate('Signup')}>
               <Text underline fontSize={16}>
                 Signup
               </Text>

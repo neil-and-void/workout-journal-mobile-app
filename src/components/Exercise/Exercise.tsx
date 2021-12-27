@@ -1,8 +1,8 @@
-import { Box, Text } from "native-base";
-import React from "react";
+import { Box, Text } from 'native-base';
+import React from 'react';
 
 interface ExerciseProps {
-  exercise: Exercise;
+  exercise: Exercise | ExerciseTemplate;
 }
 
 const Exercise = ({ exercise }: ExerciseProps) => {

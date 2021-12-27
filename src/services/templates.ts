@@ -1,4 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 
-const newWorkoutTemplate = () => {};
-const newExerciseTemplate = () => {};
+/**
+ * @param {Workout} workout object
+ */
+const createWorkoutTemplate = async (workoutTemplate: WorkoutTemplate) => {
+  const res = await axios.post(
+    'ttp://192.168.1.68:8000/api/templates/workouts',
+    workoutTemplate
+  );
+  return res.data;
+};

@@ -1,12 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const signup = async (user: Signup) => {
+export const signup = async (user: SignupCredentials) => {
   const res = await axios.post(`127.0.0.1:8000/api/auth/signup`, user);
   return res.data;
 };
 
-export const login = async (user: Login) => {
-  const res = await axios.post(`http://192.168.1.67:8000/api/auth/token`, user);
+export const login = async (user: LoginCredentials) => {
+  const res = await axios.post(`http://192.168.1.68:8000/api/auth/token`, user);
+  console.log(res.data);
   return res.data;
 };
 

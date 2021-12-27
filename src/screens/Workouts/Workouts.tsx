@@ -1,13 +1,13 @@
-import React from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import WorkoutTemplate from "../../components/WorkoutTemplate";
-import theme from "../../theme";
-import { Box, HStack, ScrollView, VStack, Text, Button } from "native-base";
+import WorkoutTemplate from '../../components/WorkoutTemplate';
+import theme from '../../theme';
+import { Box, HStack, ScrollView, VStack, Text, Button } from 'native-base';
 
 const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const startCreateWorkoutTemplateFlow = () => {
-    navigation.navigate("NewWorkoutTemplateFlow");
+    navigation.navigate('NewWorkoutTemplateFlow');
   };
 
   return (
@@ -21,14 +21,14 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
             variant="unstyled"
             color={theme.primaryColor}
             onPress={startCreateWorkoutTemplateFlow}
-            _text={{ color: "primary.500", fontSize: 20, fontWeight: 400 }}
+            _text={{ color: 'primary.500', fontSize: 20, fontWeight: 400 }}
           >
             New +
           </Button>
         </HStack>
         <ScrollView
           _contentContainerStyle={{
-            h: "100%",
+            h: '100%',
           }}
         >
           <WorkoutTemplate />
