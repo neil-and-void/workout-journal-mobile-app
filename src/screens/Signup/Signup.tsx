@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
+import React, { useContext, useState } from 'react';
+import { TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 import {
   Pressable,
   KeyboardAvoidingView,
@@ -10,11 +10,12 @@ import {
   VStack,
   Text,
   Flex,
-} from "native-base";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import * as SecureStore from "expo-secure-store";
+} from 'native-base';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import * as SecureStore from 'expo-secure-store';
 
-import { signup } from "../../services/auth";
+import { signup } from '../../services/auth';
+import UserContext from '../../contexts/userContext';
 
 interface SignupErrors {
   email?: string;
@@ -23,30 +24,43 @@ interface SignupErrors {
 }
 
 const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState<null | SignupErrors>(null);
+  const [email, setEmail] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const { setUserData } = useContext(UserContext);
+  const [error, setError] = useState<null | String>(null);
 
+  /**
+   * signup user, get tokens and navigate to Home screen on success
+   */
   const submit = async () => {
     try {
-      const tokens = await signup({ email, name, password, confirmPassword });
-      await SecureStore.setItemAsync("access_token", tokens.access_token);
-      await SecureStore.setItemAsync("refresh_token", tokens.refresh_token);
-      navigation.navigate("Home");
-    } catch (error) {
-      console.log("something went wrong");
-    }
-  };
+      const { access_token, refresh_token } = await signup({
+        email,
+        firstname,
+        password,
+        confirmPassword,
+      });
+      await SecureStore.setItemAsync('accessToken', access_token);
+      await SecureStore.setItemAsync('refreshToken', refresh_token);
+      setUserData({
+        signedOut: false,
+      });
 
-  const navigateToLogin = () => {
-    navigation.navigate("Login");
+      navigation.navigate('Home');
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data.error);
+      } else {
+        setError('Something went wrong');
+      }
+    }
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
       <Box p={2} safeArea>
@@ -76,7 +90,7 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
                   p={4}
                   variant="rounded"
                   placeholder="Name"
-                  onChangeText={setName}
+                  onChangeText={setFirstname}
                 />
               </Box>
 
@@ -110,7 +124,7 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
             </Button>
 
             <Flex flexDirection="row" justify="center">
-              <Pressable p={4} onPress={navigateToLogin}>
+              <Pressable p={4} onPress={() => navigation.navigate('Login')}>
                 <Text underline fontSize={16}>
                   Login
                 </Text>

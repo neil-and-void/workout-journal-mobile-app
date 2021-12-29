@@ -5,12 +5,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Signup from './src/screens/Signup';
 import Login from './src/screens/Login';
 import Home from './src/screens/Home';
-import { NativeBaseProvider, extendTheme } from 'native-base';
+import { NativeBaseProvider, extendTheme, Button } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
 import NewWorkoutTemplateFlow from './src/screens/NewWorkoutTemplateFlow';
 import { theme } from './src/theme';
 import * as SecureStore from 'expo-secure-store';
 import UserAuthContext from './src/contexts/userContext';
+import ViewWorkoutContext from './src/contexts/viewWorkoutTemplateContext';
+import ViewWorkoutTemplate from './src/screens/ViewWorkoutTemplate';
+import WorkoutSession from './src/screens/WorkoutSession/WorkoutSession';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,41 +26,49 @@ const Theme = {
 };
 
 export default function App() {
-  const [userAuth, setUser] = useState<User>({
+  const [userAuth, setUserAuth] = useState<User>({
     signedOut: true,
-    refreshToken: null,
-    authToken: null,
   });
+  const [viewWorkoutTemplate, setViewWorkoutTemplate] =
+    useState<WorkoutTemplate>({
+      name: '',
+      exerciseTemplates: [],
+    });
 
   /**
-   * callback to function
+   * callback function to set userAuth state
    *
    * @param user
    */
-  const setData = (user: User) => {
-    setUser(user);
+  const setUserAuthData = (user: User) => {
+    setUserAuth(user);
+  };
+
+  /**
+   * callback function to set the viewed workout
+   *
+   * @param workoutTemplate workout template to be viewed
+   */
+  const setViewWorkoutTemplateData = (workoutTemplate: WorkoutTemplate) => {
+    setViewWorkoutTemplate(workoutTemplate);
   };
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let authToken;
+      let accessToken;
       let refreshToken;
 
-      authToken = await SecureStore.getItemAsync('authtoken');
+      accessToken = await SecureStore.getItemAsync('accessToken');
       refreshToken = await SecureStore.getItemAsync('refreshToken');
 
-      if (authToken === null || refreshToken === null) {
-        setUser({
-          signedOut: false,
-          refreshToken: null,
-          authToken: null,
+      if (accessToken === null || refreshToken === null) {
+        setUserAuth({
+          signedOut: true,
         });
       } else {
-        setUser({
+        setUserAuth({
           signedOut: false,
-          refreshToken: refreshToken,
-          authToken: authToken,
         });
       }
     };
@@ -66,38 +77,78 @@ export default function App() {
   }, []);
 
   return (
-    <UserAuthContext.Provider value={{ ...userAuth, setUserData: setData }}>
-      <NativeBaseProvider theme={extendTheme(theme)}>
-        <StatusBar style="dark" />
-        <NavigationContainer theme={Theme}>
-          <Stack.Navigator>
-            <Stack.Group>
-              <Stack.Screen
-                name="Signup"
-                component={Signup}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{ headerShown: false }}
-              />
-            </Stack.Group>
-            <Stack.Group>
-              <Stack.Screen
-                name="NewWorkoutTemplateFlow"
-                component={NewWorkoutTemplateFlow}
-                options={{ headerShown: false }}
-              />
-            </Stack.Group>
-          </Stack.Navigator>
-        </NavigationContainer>
-      </NativeBaseProvider>
+    <UserAuthContext.Provider
+      value={{ ...userAuth, setUserData: setUserAuthData }}
+    >
+      <ViewWorkoutContext.Provider
+        value={{
+          ...viewWorkoutTemplate,
+          setTemplateData: setViewWorkoutTemplateData,
+        }}
+      >
+        <NativeBaseProvider theme={extendTheme(theme)}>
+          <StatusBar style="dark" />
+          <NavigationContainer theme={Theme}>
+            <Stack.Navigator>
+              {/* only show authorized screens if user is authenticated */}
+              {userAuth.signedOut ? (
+                <>
+                  <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Signup"
+                    component={Signup}
+                    options={{ headerShown: false }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Stack.Screen
+                    name="Home"
+                    component={Home}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="NewWorkoutTemplateFlow"
+                    component={NewWorkoutTemplateFlow}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="ViewWorkoutTemplate"
+                    component={ViewWorkoutTemplate}
+                    options={({ navigation }) => ({
+                      headerLeft: () => (
+                        <Button
+                          variant="unstyled"
+                          onPress={() => navigation.goBack()}
+                          _text={{
+                            color: 'primary.500',
+                            fontSize: 18,
+                            fontWeight: 400,
+                          }}
+                        >
+                          Back
+                        </Button>
+                      ),
+                      headerShadowVisible: false,
+                      title: '',
+                      animationEnabled: false,
+                    })}
+                  />
+                  <Stack.Screen
+                    name="WorkoutSession"
+                    component={WorkoutSession}
+                    options={{ headerShown: false }}
+                  />
+                </>
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </ViewWorkoutContext.Provider>
     </UserAuthContext.Provider>
   );
 }

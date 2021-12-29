@@ -6,23 +6,21 @@ import theme from '../../theme';
 const Profile = () => {
   const { setUserData } = useContext(UserContext);
 
-  const logout = () => {
+  const signOut = () => {
     setUserData({
       signedOut: true,
-      accessToken: null,
-      refreshToken: null,
     });
   };
 
   return (
-    <Box p={2} safeArea>
+    <Box px={6} safeArea>
       <Box>
         <Text fontSize={48} fontWeight={700}>
-          Journal
+          Profile
         </Text>
       </Box>
       <Box>
-        <Button onPress={() => logout()}>Logout</Button>
+        <Button onPress={() => signOut()}>Sign Out</Button>
       </Box>
     </Box>
   );

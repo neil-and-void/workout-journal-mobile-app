@@ -1,16 +1,24 @@
-import React from "react";
-import { ScrollView, Box, Text } from "native-base";
-import Workout from "../../components/Workout";
-import theme from "../../theme";
+import React from 'react';
+import { ScrollView, Box, Text, HStack, Button } from 'native-base';
+import Workout from '../../components/Workout';
+import theme from '../../theme';
 
 const Journal = () => {
   return (
-    <Box p={2} safeArea>
-      <Box>
+    <Box px={6} safeArea>
+      <HStack justifyContent="space-between">
         <Text fontSize={48} fontWeight={700}>
           Journal
         </Text>
-      </Box>
+        <Button
+          variant="unstyled"
+          color={theme.primaryColor}
+          onPress={() => console.log('view calendar')}
+          _text={{ color: 'primary.500', fontSize: 16, fontWeight: 400 }}
+        >
+          View Calendar
+        </Button>
+      </HStack>
       <ScrollView>
         <Workout />
         <Workout />

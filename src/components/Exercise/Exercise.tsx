@@ -7,7 +7,7 @@ interface ExerciseProps {
 
 const Exercise = ({ exercise }: ExerciseProps) => {
   return (
-    <Box rounded={16} mb={4} p={4} bg="warmGray.200">
+    <Box rounded={16} p={4} bg="warmGray.200">
       <Text fontSize={20} fontWeight={600}>
         {exercise.name}
       </Text>

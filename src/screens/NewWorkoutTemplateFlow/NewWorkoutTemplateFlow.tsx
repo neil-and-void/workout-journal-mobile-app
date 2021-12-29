@@ -8,6 +8,7 @@ import NewExerciseTemplates from '../NewExerciseTemplates';
 import NewWorkoutTemplateContext from '../../contexts/newWorkoutTemplateContext';
 import theme from '../../theme';
 import WorkoutTemplateFlowErrorsContext from '../../contexts/workoutTemplateFlowErrorsContext';
+import { createWorkoutTemplate } from '../../services/templates';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,14 +70,19 @@ const NewWorkoutTemplateFlow = ({
   /**
    * submit workout template to be created
    */
-  const createWorkout = () => {
+  const createWorkout = async () => {
     if (isExerciseTemplateInvalid(workoutTemplate.exerciseTemplates)) {
       setError('Workout name invalid');
       return;
     }
-    // clear error
-    setError(null);
-    navigation.navigate('Home', { screen: 'WorkoutHome' });
+    try {
+      // clear error
+      setError(null);
+      await createWorkoutTemplate(workoutTemplate);
+      navigation.navigate('Home', { screen: 'Workouts' });
+    } catch (err) {
+      setError('Something went wrong');
+    }
   };
 
   return (

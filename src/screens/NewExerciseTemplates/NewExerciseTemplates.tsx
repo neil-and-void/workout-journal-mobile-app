@@ -1,9 +1,10 @@
 import React, { useState, useRef, useContext } from 'react';
 import { Box, Input, Text, Button, FormControl } from 'native-base';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, Swipeable } from 'react-native-gesture-handler';
 
 import Exercise from '../../components/Exercise';
 import NewWorkoutTemplateContext from '../../contexts/newWorkoutTemplateContext';
+import ExerciseTemplateActions from '../../components/ExerciseTemplateActions';
 
 const exerciseInitialState = {
   name: '',
@@ -175,13 +176,33 @@ const NewExerciseTemplates = () => {
           </Box>
         </FormControl>
       </Box>
-      <ScrollView
-        _contentContainerStyle={{
-          h: '100%',
-        }}
-      >
+      <ScrollView>
         {exerciseTemplates.map((exercise, idx) => {
-          return <Exercise exercise={exercise} key={idx} />;
+          return (
+            <Box pb={4} key={idx}>
+              <Swipeable
+                renderRightActions={() => {
+                  return (
+                    <Button
+                      onPress={() => {
+                        exerciseTemplates.splice(idx, 1);
+                        setTemplateData({
+                          name: name,
+                          exerciseTemplates: exerciseTemplates,
+                        });
+                      }}
+                      borderRadius={16}
+                      backgroundColor="red.500"
+                    >
+                      Delete
+                    </Button>
+                  );
+                }}
+              >
+                <Exercise exercise={exercise} />
+              </Swipeable>
+            </Box>
+          );
         })}
       </ScrollView>
     </Box>

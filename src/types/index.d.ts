@@ -4,7 +4,7 @@ interface LoginCredentials {
 }
 
 interface SignupCredentials {
-  name: string;
+  firstname: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -22,6 +22,7 @@ interface Exercise {
 }
 
 interface WorkoutTemplate {
+  id: number;
   name: string;
   exerciseTemplates: ExerciseTemplate[];
 }
@@ -34,14 +35,10 @@ interface ExerciseTemplate {
 
 interface User {
   signedOut: boolean;
-  refreshToken: string | null | undefined;
-  accessToken: string | null | undefined;
 }
 
 interface UserContext {
   signedOut: boolean;
-  refreshToken: string | null | undefined;
-  accessToken: string | null | undefined;
   setUserData: (user: User) => void;
 }
 

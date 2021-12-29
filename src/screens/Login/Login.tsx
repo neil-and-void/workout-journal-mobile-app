@@ -11,7 +11,9 @@ import {
   Flex,
 } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { login } from '../../services/auth';
+import * as SecureStore from 'expo-secure-store';
+
+import { login, refreshToken } from '../../services/auth';
 import UserContext from '../../contexts/userContext';
 
 const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
@@ -23,16 +25,17 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [error, setError] = useState<null | string>(null);
 
   /**
-   *
+   * submit login credentials to get access and refresh token
    */
   const submit = async () => {
     try {
       const { access_token, refresh_token } = await login(formData);
+      await SecureStore.setItemAsync('accessToken', access_token);
+      await SecureStore.setItemAsync('refreshToken', refresh_token);
       setUserData({
-        accessToken: access_token,
-        refreshToken: refresh_token,
         signedOut: false,
       });
+
       navigation.navigate('Home');
     } catch (err) {
       if (err.response) {

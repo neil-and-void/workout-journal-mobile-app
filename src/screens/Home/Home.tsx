@@ -18,7 +18,7 @@ const Home = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'WorkoutHome') {
+          if (route.name === 'Workouts') {
             iconName = focused ? 'barbell' : 'barbell-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
@@ -39,7 +39,7 @@ const Home = () => {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="WorkoutHome"
+        name="Workouts"
         component={Workouts}
         options={{ headerShown: false }}
       />

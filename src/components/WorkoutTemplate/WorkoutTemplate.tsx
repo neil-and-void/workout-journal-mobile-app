@@ -1,39 +1,31 @@
-import { Box } from "native-base";
-import React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
-import theme from "../../theme";
+import { Box, Text, Pressable } from 'native-base';
+import React from 'react';
 
-const WorkoutTemplate = () => {
+interface WorkoutTemplateProps {
+  workout: WorkoutTemplate;
+  onPress: () => void;
+}
+
+const WorkoutTemplate = ({ workout, onPress }: WorkoutTemplateProps) => {
+  const viewExercises = () => {
+    console.log('view exercises');
+  };
+
   return (
-    <Pressable onPress={() => {}}>
-      <Box rounded={16} mb={4} p={4} bg="warmGray.200">
-        <Text style={styles.workoutName}>Legs</Text>
-        <Text style={styles.workoutCount}>
-          6 <Text style={styles.text}>exercises</Text>
+    <Pressable onPress={onPress}>
+      <Box rounded={16} p={4} bg="warmGray.200">
+        <Text fontWeight={700} fontSize={16}>
+          {workout.name}
+        </Text>
+        <Text fontWeight={700} fontSize={32}>
+          {workout.exerciseTemplates.length}{' '}
+          <Text fontSize={16} fontWeight={400}>
+            {workout.exerciseTemplates.length > 1 ? 'exercises' : 'exercise'}
+          </Text>
         </Text>
       </Box>
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  workoutTemplate: {
-    borderRadius: theme.borderRadius,
-    backgroundColor: theme.tertiaryColor,
-    padding: 24,
-  },
-  workoutName: {
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  workoutCount: {
-    fontSize: 32,
-    fontWeight: "700",
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: "400",
-  },
-});
 
 export default WorkoutTemplate;
