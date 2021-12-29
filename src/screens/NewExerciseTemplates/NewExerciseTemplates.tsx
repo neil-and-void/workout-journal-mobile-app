@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext } from 'react';
 import { Box, Input, Text, Button, FormControl } from 'native-base';
 import { ScrollView, Swipeable } from 'react-native-gesture-handler';
 
-import Exercise from '../../components/Exercise';
+import ExerciseTemplate from '../../components/ExerciseTemplate';
 import NewWorkoutTemplateContext from '../../contexts/newWorkoutTemplateContext';
 import ExerciseTemplateActions from '../../components/ExerciseTemplateActions';
 
@@ -16,8 +16,9 @@ const NewExerciseTemplates = () => {
   const nameRef = useRef(null);
   const setsRef = useRef(null);
   const repsRef = useRef(null);
-  const [exercise, setExercise] = useState<Exercise>(exerciseInitialState);
-  const [errors, setErrors] = useState<ExerciseFormErrors>({});
+  const [exercise, setExercise] =
+    useState<ExerciseTemplate>(exerciseInitialState);
+  const [errors, setErrors] = useState<ExerciseTemplateFormErrors>({});
   const { name, exerciseTemplates, setTemplateData } = useContext(
     NewWorkoutTemplateContext
   );
@@ -44,30 +45,30 @@ const NewExerciseTemplates = () => {
    * @param exercise object with exercise fields
    * @returns boolean indicating if exercise is valid
    */
-  const validateExercise = (exercise: Exercise) => {
+  const validateExercise = (exerciseTemplate: ExerciseTemplate) => {
     let nameErr;
     let setsErr;
     let repsErr;
     let valid = true;
 
-    if (exercise.name === undefined || exercise.name === '') {
+    if (exerciseTemplate.name === undefined || exerciseTemplate.name === '') {
       nameErr = 'Invalid name';
       valid = false;
     }
 
     if (
-      exercise.sets === undefined ||
-      exercise.sets === null ||
-      exercise.sets === 0
+      exerciseTemplate.sets === undefined ||
+      exerciseTemplate.sets === null ||
+      exerciseTemplate.sets === 0
     ) {
       setsErr = 'Invalid sets';
       valid = false;
     }
 
     if (
-      exercise.reps === undefined ||
-      exercise.reps === null ||
-      exercise.reps === 0
+      exerciseTemplate.reps === undefined ||
+      exerciseTemplate.reps === null ||
+      exerciseTemplate.reps === 0
     ) {
       repsErr = 'Invalid reps';
       valid = false;
@@ -199,7 +200,7 @@ const NewExerciseTemplates = () => {
                   );
                 }}
               >
-                <Exercise exercise={exercise} />
+                <ExerciseTemplate exerciseTemplate={exercise} />
               </Swipeable>
             </Box>
           );

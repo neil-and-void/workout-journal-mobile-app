@@ -3,7 +3,7 @@ import { VStack, Box, Button, ScrollView, Text } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import viewWorkoutContext from '../../contexts/viewWorkoutTemplateContext';
-import Exercise from '../../components/Exercise';
+import Exercise from '../../components/ExerciseTemplate';
 
 const ViewWorkoutTemplate = ({
   navigation,
@@ -24,7 +24,7 @@ const ViewWorkoutTemplate = ({
       <ScrollView>
         {exerciseTemplates.map((exerciseTemplate, idx) => (
           <Box pb={4} key={idx}>
-            <Exercise exercise={exerciseTemplate} />
+            <Exercise exerciseTemplate={exerciseTemplate} />
           </Box>
         ))}
       </ScrollView>
