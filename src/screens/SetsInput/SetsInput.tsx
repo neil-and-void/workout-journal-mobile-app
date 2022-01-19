@@ -28,12 +28,20 @@ const SetsInput = () => {
     console.log('jfkds');
   };
 
-  const handleWeightChange = (weight: string) => {
-    console.log(weight);
+  const handleWeightChange = (weight: string, idx: number) => {
+    const newSetArray = [...sets];
+    const newSet = { ...newSetArray[idx], weight };
+    newSetArray.splice(idx, 1, newSet);
+    setExerciseData(exercise, exerciseTemplate, newSetArray);
+    // TODO update set in backend
   };
 
-  const handleRepsChange = (reps: string) => {
-    console.log(reps, typeof reps);
+  const handleRepsChange = (reps: string, idx: number) => {
+    const newSetArray = [...sets];
+    const newSet = { ...sets[idx], reps };
+    newSetArray.splice(idx, 1, newSet);
+    setExerciseData(exercise, exerciseTemplate, newSetArray);
+    // TODO update set in backend
   };
 
   return (
@@ -52,8 +60,8 @@ const SetsInput = () => {
               <Box pb={4} key={idx}>
                 <Set
                   set={set}
-                  onRepsChange={handleRepsChange}
-                  onWeightChange={handleWeightChange}
+                  onRepsChange={(reps) => handleRepsChange(reps, idx)}
+                  onWeightChange={(weight) => handleWeightChange(weight, idx)}
                   onDelete={handleDelete}
                 />
               </Box>

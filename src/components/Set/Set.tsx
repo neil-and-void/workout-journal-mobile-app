@@ -1,6 +1,5 @@
 import React from 'react';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import { Box, HStack, Input, Button } from 'native-base';
+import { Box, HStack, Input, Button, Text } from 'native-base';
 
 interface SetProps {
   set: ExerciseSet;
@@ -12,7 +11,7 @@ interface SetProps {
 const Set = ({ set, onWeightChange, onRepsChange, onDelete }: SetProps) => {
   return (
     <HStack>
-      <Box flex={1} pr={4}>
+      <HStack flex={1} pr={4} flexGrow={1} alignItems="center">
         <Input
           keyboardType="numeric"
           placeholder="reps"
@@ -22,9 +21,13 @@ const Set = ({ set, onWeightChange, onRepsChange, onDelete }: SetProps) => {
           borderWidth={0}
           borderRadius={16}
           backgroundColor="gray.200"
+          flexGrow={1}
         />
-      </Box>
-      <Box flex={1} pr={4}>
+        <Text pl={2} fontSize="md">
+          reps
+        </Text>
+      </HStack>
+      <HStack flex={1} pr={4} flexGrow={1} alignItems="center">
         <Input
           keyboardType="numeric"
           placeholder="weight"
@@ -34,8 +37,12 @@ const Set = ({ set, onWeightChange, onRepsChange, onDelete }: SetProps) => {
           borderWidth={0}
           backgroundColor="gray.200"
           borderRadius={16}
+          flexGrow={1}
         />
-      </Box>
+        <Text pl={2} fontSize="md">
+          lbs
+        </Text>
+      </HStack>
       <Button
         variant="unstyled"
         _text={{ color: 'red.500' }}
