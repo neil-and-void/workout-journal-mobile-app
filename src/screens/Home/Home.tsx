@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import Profile from '../Profile';
 import theme from '../../theme';
 import Journal from '../Journal';
-import WorkoutHome from '../WorkoutHome';
 import Workouts from '../Workouts';
 
 const Tab = createBottomTabNavigator();

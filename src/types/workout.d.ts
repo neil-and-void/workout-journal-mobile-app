@@ -1,4 +1,7 @@
 interface Workout {
+  id: number;
   name: string;
-  exercises: Exercise[];
+  started: string;
+  active: boolean;
+  exercises: object[];
 }

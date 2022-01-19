@@ -15,9 +15,11 @@ import WorkoutTemplateActions from '../../components/WorkoutTemplateActions/Work
 import ViewWorkoutContext from '../../contexts/viewWorkoutTemplateContext';
 
 const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutTemplate[]>(
-    []
-  );
+  const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutTemplate[]>({
+    id: -1,
+    name: '',
+    exerciseTemplates: [],
+  });
   const { setTemplateData } =
     useContext<WorkoutTemplateContext>(ViewWorkoutContext);
   const [error, setError] = useState<string | null>(null);
@@ -76,9 +78,9 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
   };
 
   return (
-    <Box px={6} h="100%" safeArea>
+    <Box h="100%" safeArea>
       <VStack h="100%">
-        <HStack justifyContent="space-between" alignItems="center">
+        <HStack justifyContent="space-between" alignItems="center" px={6}>
           <Text fontWeight={700} fontSize={48}>
             Workouts
           </Text>
@@ -95,10 +97,11 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
         <ScrollView
           _contentContainerStyle={{
             h: '100%',
+            paddingX: 4,
           }}
         >
           {workoutTemplates.map((workoutTemplate, idx) => (
-            <Box pb={4} key={idx}>
+            <Box pb={2} key={idx}>
               <Swipeable
                 renderRightActions={() => (
                   <Button

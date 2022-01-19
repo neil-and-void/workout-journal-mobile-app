@@ -2,14 +2,14 @@ import axios from 'axios';
 
 export const signup = async (user: SignupCredentials) => {
   const res = await axios.post(
-    `http://192.168.1.68:8000/api/auth/signup`,
+    `http://192.168.1.72:8000/api/auth/signup`,
     user
   );
   return res.data;
 };
 
 export const login = async (user: LoginCredentials) => {
-  const res = await axios.post(`http://192.168.1.68:8000/api/auth/token`, user);
+  const res = await axios.post(`http://192.168.1.72:8000/api/auth/token`, user);
   return res.data;
 };
 

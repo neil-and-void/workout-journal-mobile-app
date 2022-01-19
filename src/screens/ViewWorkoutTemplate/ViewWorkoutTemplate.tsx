@@ -4,24 +4,31 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import viewWorkoutContext from '../../contexts/viewWorkoutTemplateContext';
 import Exercise from '../../components/ExerciseTemplate';
+import { startNewWorkout } from '../../services/workouts';
+import WorkoutSessionContext from '../../contexts/workoutSessionContext';
 
 const ViewWorkoutTemplate = ({
   navigation,
 }: NativeStackScreenProps<any, any>) => {
-  const { name, exerciseTemplates } =
+  const { name, exerciseTemplates, id } =
     useContext<WorkoutTemplateContext>(viewWorkoutContext);
 
+  console.log(exerciseTemplates);
+
+  const startWorkoutSession = async () => {
+    await startNewWorkout(id);
+    navigation.navigate('WorkoutSession');
+  };
+
   return (
-    <VStack px={4}>
+    <VStack px={4} height="100%">
       <Box pb={4}>
         <Text textAlign="center" fontWeight={700} fontSize={36} pb={8}>
           {name}
         </Text>
-        <Button onPress={() => navigation.navigate('WorkoutSession')}>
-          Start
-        </Button>
+        <Button onPress={startWorkoutSession}>Start</Button>
       </Box>
-      <ScrollView>
+      <ScrollView flex={1}>
         {exerciseTemplates.map((exerciseTemplate, idx) => (
           <Box pb={4} key={idx}>
             <Exercise exerciseTemplate={exerciseTemplate} />

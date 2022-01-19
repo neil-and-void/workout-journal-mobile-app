@@ -13,8 +13,9 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as SecureStore from 'expo-secure-store';
 
-import { login, refreshToken } from '../../services/auth';
+import { login } from '../../services/auth';
 import UserContext from '../../contexts/userContext';
+import { AxiosError } from 'axios';
 
 const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [formData, setData] = useState<LoginCredentials>({
@@ -37,7 +38,8 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
       });
 
       navigation.navigate('Home');
-    } catch (err) {
+    } catch (error) {
+      const err = error as AxiosError;
       if (err.response) {
         setError(err.response.data.error);
       } else {

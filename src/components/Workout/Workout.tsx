@@ -3,7 +3,7 @@ import { Box, Text, Pressable, HStack, VStack } from 'native-base';
 
 const Workout = () => {
   return (
-    <Pressable pb={4} onPress={() => console.log('1234')}>
+    <Pressable onPress={() => console.log('1234')}>
       <HStack>
         <VStack
           borderTopWidth={1}

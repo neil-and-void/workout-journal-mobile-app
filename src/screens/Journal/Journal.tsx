@@ -5,7 +5,7 @@ import theme from '../../theme';
 
 const Journal = () => {
   return (
-    <Box px={6} safeArea>
+    <Box px={6} height="100%" safeArea>
       <HStack justifyContent="space-between">
         <Text fontSize={48} fontWeight={700}>
           Journal
@@ -19,20 +19,52 @@ const Journal = () => {
           View Calendar
         </Button>
       </HStack>
-      <ScrollView>
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
-        <Workout />
+      <ScrollView flex={1}>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
+        <Box pb={4}>
+          <Workout />
+        </Box>
       </ScrollView>
     </Box>
   );

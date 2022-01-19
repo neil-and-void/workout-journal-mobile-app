@@ -4,7 +4,7 @@ interface WorkoutSessionContext {
 }
 
 interface WorkoutTemplateContext {
-  id?: number | null;
+  id: number;
   name: string;
   exerciseTemplates: ExerciseTemplate[];
   setTemplateData: (workoutTemplate: WorkoutTemplate) => void;
@@ -12,4 +12,15 @@ interface WorkoutTemplateContext {
 interface UserContext {
   signedOut: boolean;
   setUserData: (user: User) => void;
+}
+
+interface ExerciseContext {
+  exerciseTemplate: ExerciseTemplate | null;
+  exercise: Exercise | null;
+  sets: Set[];
+  setExerciseData: (
+    exercise: Exercise,
+    exerciseTemplate: ExerciseTemplate,
+    sets: Sets[]
+  ) => void;
 }

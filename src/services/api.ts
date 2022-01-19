@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
-  baseURL: 'http://192.168.1.68:8000/api',
+  baseURL: 'http://192.168.1.72:8000/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -28,7 +28,11 @@ instance.interceptors.response.use(
   async (err) => {
     const originalConfig = err.config;
 
-    if (originalConfig.url !== '/auth/token' && err.response) {
+    if (
+      originalConfig.url !== '/auth/token' &&
+      originalConfig.url !== '/auth/signup' &&
+      err.response
+    ) {
       // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
