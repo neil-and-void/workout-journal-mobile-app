@@ -1,11 +1,20 @@
 import React from 'react';
+import { Dimensions } from 'react-native';
 import { ScrollView, Box, Text, HStack, Button } from 'native-base';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+
 import Workout from '../../components/Workout';
 import theme from '../../theme';
 
 const Journal = () => {
+  const tabBarHeight = useBottomTabBarHeight();
+
   return (
-    <Box px={6} height="100%" safeArea>
+    <Box
+      height={Dimensions.get('window').height - tabBarHeight}
+      flex={1}
+      safeArea
+    >
       <HStack justifyContent="space-between">
         <Text fontSize={48} fontWeight={700}>
           Journal
@@ -19,53 +28,55 @@ const Journal = () => {
           View Calendar
         </Button>
       </HStack>
-      <ScrollView flex={1}>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-        <Box pb={4}>
-          <Workout />
-        </Box>
-      </ScrollView>
+      <Box flexGrow={1}>
+        <ScrollView height="100%">
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+          <Box pb={4}>
+            <Workout />
+          </Box>
+        </ScrollView>
+      </Box>
     </Box>
   );
 };

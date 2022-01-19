@@ -3,7 +3,7 @@ interface WorkoutSessionContext {
   setWorkoutSessionData: (workout: Workout) => void;
 }
 
-interface WorkoutTemplateContext {
+interface ViewWorkoutTemplateContext {
   id: number;
   name: string;
   exerciseTemplates: ExerciseTemplate[];

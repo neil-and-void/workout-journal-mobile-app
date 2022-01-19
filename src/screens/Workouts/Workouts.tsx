@@ -1,36 +1,40 @@
 import React, { useState, useContext, useCallback } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFocusEffect } from '@react-navigation/native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { RefreshControl, Dimensions } from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { Box, HStack, ScrollView, VStack, Text, Button } from 'native-base';
 
 import WorkoutTemplate from '../../components/WorkoutTemplate';
 import theme from '../../theme';
-import { Box, HStack, ScrollView, VStack, Text, Button } from 'native-base';
 import TemplateService from '../../services/TemplateService';
-import { useFocusEffect } from '@react-navigation/native';
-import { Swipeable } from 'react-native-gesture-handler';
-import WorkoutTemplateActions from '../../components/WorkoutTemplateActions/WorkoutTemplateActions';
-import ViewWorkoutContext from '../../contexts/viewWorkoutTemplateContext';
 
 const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutTemplate[]>(
     []
   );
-  const { setTemplateData } =
-    useContext<WorkoutTemplateContext>(ViewWorkoutContext);
+  const tabBarHeight = useBottomTabBarHeight();
 
   /**
    *
    */
-  const refreshWorkoutTemplates = async () => {
+  const getWorkoutTemplates = async () => {
     try {
       setError(null);
+      setLoading(true);
+
       // get workout templates and populate with exercise templates
-      const data = await getWorkoutTemplates();
+      const data = await TemplateService.getWorkoutTemplates();
+
       const workoutTemplateData = await Promise.all(
-        data.map(async (workoutTemplate, idx) => {
-          const exerciseTemplates = await getExercisesTemplates(
+        data.map(async (workoutTemplate: WorkoutTemplate, idx: number) => {
+          const exerciseTemplates = await TemplateService.getExercisesTemplates(
             workoutTemplate.id
           );
+
           return {
             id: workoutTemplate.id,
             name: workoutTemplate.name,
@@ -38,6 +42,8 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
           };
         })
       );
+
+      setLoading(false);
 
       setWorkoutTemplates(workoutTemplateData);
     } catch (err) {
@@ -50,16 +56,18 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
    */
   useFocusEffect(
     useCallback(() => {
-      refreshWorkoutTemplates();
+      if (workoutTemplates.length === 0) {
+        getWorkoutTemplates();
+      }
     }, [])
   );
 
   /**
    * navigate to screen to view workout template
    */
-  const viewWorkoutTemplate = (workoutTemplate: WorkoutTemplate) => {
+  const viewWorkoutTemplate = (workoutTemplateId: number) => {
     navigation.navigate('ViewWorkoutTemplate');
-    setTemplateData(workoutTemplate);
+    // setTemplateData(workoutTemplate);
   };
 
   /**
@@ -68,13 +76,13 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
    */
   const handleDelete = async (workoutTemplateId: number) => {
     try {
-      await deleteWorkoutTemplate(workoutTemplateId);
-      await refreshWorkoutTemplates();
+      await TemplateService.deleteWorkoutTemplate(workoutTemplateId);
+      await getWorkoutTemplates();
     } catch (err) {}
   };
 
   return (
-    <Box h="100%" safeArea>
+    <Box h={Dimensions.get('window').height - tabBarHeight} safeArea>
       <VStack h="100%">
         <HStack justifyContent="space-between" alignItems="center" px={6}>
           <Text fontWeight={700} fontSize={48}>
@@ -89,34 +97,48 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
             New +
           </Button>
         </HStack>
-        {error ? <Text color="red.500">{error}</Text> : null}
-        <ScrollView
-          _contentContainerStyle={{
-            h: '100%',
-            paddingX: 4,
-          }}
-        >
-          {workoutTemplates.map((workoutTemplate, idx) => (
-            <Box pb={2} key={idx}>
-              <Swipeable
-                renderRightActions={() => (
-                  <Button
-                    onPress={() => handleDelete(workoutTemplate.id)}
-                    borderRadius={16}
-                    backgroundColor="red.500"
-                  >
-                    Delete
-                  </Button>
-                )}
-              >
-                <WorkoutTemplate
-                  workout={workoutTemplate}
-                  onPress={() => viewWorkoutTemplate(workoutTemplate)}
-                />
-              </Swipeable>
-            </Box>
-          ))}
-        </ScrollView>
+
+        {error ? (
+          <Text textAlign="center" color="red.500">
+            {error}
+          </Text>
+        ) : null}
+
+        <Box flexGrow={1}>
+          <ScrollView
+            _contentContainerStyle={{
+              h: '100%',
+              paddingX: 4,
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={getWorkoutTemplates}
+              />
+            }
+          >
+            {workoutTemplates.map((workoutTemplate, idx) => (
+              <Box pb={2} key={idx}>
+                <Swipeable
+                  renderRightActions={() => (
+                    <Button
+                      onPress={() => handleDelete(workoutTemplate.id)}
+                      borderRadius={16}
+                      backgroundColor="red.500"
+                    >
+                      Delete
+                    </Button>
+                  )}
+                >
+                  <WorkoutTemplate
+                    workout={workoutTemplate}
+                    onPress={() => viewWorkoutTemplate(workoutTemplate.id)}
+                  />
+                </Swipeable>
+              </Box>
+            ))}
+          </ScrollView>
+        </Box>
       </VStack>
     </Box>
   );
