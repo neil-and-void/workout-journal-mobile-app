@@ -14,8 +14,9 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as SecureStore from 'expo-secure-store';
 
-import { signup } from '../../services/auth';
+import AuthService from '../../services/AuthService';
 import UserContext from '../../contexts/userContext';
+import { AxiosError } from 'axios';
 
 interface SignupErrors {
   email?: string;
@@ -36,7 +37,7 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
    */
   const submit = async () => {
     try {
-      const { access_token, refresh_token } = await signup({
+      const { access_token, refresh_token } = await AuthService.signup({
         email,
         firstname,
         password,
@@ -49,7 +50,8 @@ const Signup = ({ navigation }: NativeStackScreenProps<any, any>) => {
       });
 
       navigation.navigate('Home');
-    } catch (err) {
+    } catch (error) {
+      const err = error as AxiosError;
       if (err.response) {
         setError(err.response.data.error);
       } else {

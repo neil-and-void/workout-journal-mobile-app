@@ -2,18 +2,14 @@ import React, { useContext } from 'react';
 import { VStack, Box, Button, ScrollView, Text } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import viewWorkoutContext from '../../contexts/viewWorkoutTemplateContext';
 import Exercise from '../../components/ExerciseTemplate';
 import { startNewWorkout } from '../../services/workouts';
-import WorkoutSessionContext from '../../contexts/workoutSessionContext';
 
 const ViewWorkoutTemplate = ({
   navigation,
 }: NativeStackScreenProps<any, any>) => {
   const { name, exerciseTemplates, id } =
     useContext<WorkoutTemplateContext>(viewWorkoutContext);
-
-  console.log(exerciseTemplates);
 
   const startWorkoutSession = async () => {
     await startNewWorkout(id);

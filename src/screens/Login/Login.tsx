@@ -13,7 +13,7 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as SecureStore from 'expo-secure-store';
 
-import { login } from '../../services/auth';
+import AuthService from '../../services/AuthService';
 import UserContext from '../../contexts/userContext';
 import { AxiosError } from 'axios';
 
@@ -30,7 +30,7 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
    */
   const submit = async () => {
     try {
-      const { access_token, refresh_token } = await login(formData);
+      const { access_token, refresh_token } = await AuthService.login(formData);
       await SecureStore.setItemAsync('accessToken', access_token);
       await SecureStore.setItemAsync('refreshToken', refresh_token);
       setUserData({

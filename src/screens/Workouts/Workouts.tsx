@@ -4,30 +4,26 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import WorkoutTemplate from '../../components/WorkoutTemplate';
 import theme from '../../theme';
 import { Box, HStack, ScrollView, VStack, Text, Button } from 'native-base';
-import {
-  deleteWorkoutTemplate,
-  getExercisesTemplates,
-  getWorkoutTemplates,
-} from '../../services/templates';
+import TemplateService from '../../services/TemplateService';
 import { useFocusEffect } from '@react-navigation/native';
 import { Swipeable } from 'react-native-gesture-handler';
 import WorkoutTemplateActions from '../../components/WorkoutTemplateActions/WorkoutTemplateActions';
 import ViewWorkoutContext from '../../contexts/viewWorkoutTemplateContext';
 
 const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutTemplate[]>({
-    id: -1,
-    name: '',
-    exerciseTemplates: [],
-  });
+  const [error, setError] = useState<string | null>(null);
+  const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutTemplate[]>(
+    []
+  );
   const { setTemplateData } =
     useContext<WorkoutTemplateContext>(ViewWorkoutContext);
-  const [error, setError] = useState<string | null>(null);
 
+  /**
+   *
+   */
   const refreshWorkoutTemplates = async () => {
     try {
       setError(null);
-
       // get workout templates and populate with exercise templates
       const data = await getWorkoutTemplates();
       const workoutTemplateData = await Promise.all(

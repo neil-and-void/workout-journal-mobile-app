@@ -1,5 +1,5 @@
 interface WorkoutTemplate {
-  id?: number;
+  id: number;
   name: string;
   exerciseTemplates: ExerciseTemplate[];
 }

@@ -8,7 +8,7 @@ import NewExerciseTemplates from '../NewExerciseTemplates';
 import NewWorkoutTemplateContext from '../../contexts/newWorkoutTemplateContext';
 import theme from '../../theme';
 import WorkoutTemplateFlowErrorsContext from '../../contexts/workoutTemplateFlowErrorsContext';
-import { createWorkoutTemplate } from '../../services/templates';
+import { createWorkoutTemplate } from '../../services/TemplateService';
 
 const Stack = createNativeStackNavigator();
 

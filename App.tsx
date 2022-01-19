@@ -11,7 +11,6 @@ import NewWorkoutTemplateFlow from './src/screens/NewWorkoutTemplateFlow';
 import { theme } from './src/theme';
 import * as SecureStore from 'expo-secure-store';
 import UserAuthContext from './src/contexts/userContext';
-import ViewWorkoutContext from './src/contexts/viewWorkoutTemplateContext';
 import ViewWorkoutTemplate from './src/screens/ViewWorkoutTemplate';
 import WorkoutSession from './src/screens/WorkoutSession/WorkoutSession';
 import WorkoutSessionContext from './src/contexts/workoutSessionContext';
