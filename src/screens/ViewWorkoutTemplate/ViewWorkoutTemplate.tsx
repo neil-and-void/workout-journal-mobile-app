@@ -1,11 +1,10 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useContext } from 'react';
 import { VStack, Box, Button, ScrollView, Text } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import ViewWorkoutTemplateContext from '../../contexts/viewWorkoutTemplateContext';
 
+import ViewWorkoutTemplateContext from '../../contexts/viewWorkoutTemplateContext';
 import Exercise from '../../components/ExerciseTemplate';
-import { startNewWorkout } from '../../services/workouts';
-import { useFocusEffect } from '@react-navigation/native';
+import WorkoutService from '../../services/WorkoutService';
 
 const ViewWorkoutTemplate = ({
   navigation,
@@ -14,10 +13,10 @@ const ViewWorkoutTemplate = ({
     useContext<ViewWorkoutTemplateContext>(ViewWorkoutTemplateContext);
 
   /**
-   * begin workout with the workout template by the given id
+   * start a workout with workout template equal to the one above
    */
   const startWorkoutSession = async () => {
-    await startNewWorkout(id);
+    await WorkoutService.startNewWorkout(id);
     navigation.navigate('WorkoutSession');
   };
 

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   Text,
   Icon,
   ScrollView,
+  Spinner,
 } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,7 +17,8 @@ import viewWorkoutContext from '../../contexts/viewWorkoutTemplateContext';
 import WorkoutSessionContext from '../../contexts/workoutSessionContext';
 import Exercise from '../../components/Exercise';
 import ExerciseContext from '../../contexts/exerciseContext';
-import { getActiveWorkout } from '../../services/workouts';
+import WorkoutService from '../../services/WorkoutService';
+import { useFocusEffect } from '@react-navigation/native';
 
 const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const { workout, setWorkoutSessionData } = useContext<WorkoutSessionContext>(
@@ -24,21 +26,29 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
   );
   const { setExerciseData } = useContext<ExerciseContext>(ExerciseContext);
   const [minutes, setMinutes] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // const timer = setInterval(() => {
     //   // append 'Z' to indicate this time is UTC
     //   setMinutes(dayjs().diff(dayjs(workout.started + 'Z'), 'm'));
     // }, 60000);
-    getWorkoutData();
     // return () => {
     //   clearInterval(timer);
     // };
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      getWorkoutData();
+    }, [])
+  );
+
   const getWorkoutData = async () => {
-    const workoutData = await getActiveWorkout();
+    setLoading(true);
+    const workoutData = await WorkoutService.getActiveWorkout();
     setWorkoutSessionData(workoutData);
+    setLoading(false);
   };
 
   /**
@@ -65,12 +75,13 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
     return String(time).padStart(2, '0');
   };
 
-  if (!workout)
+  if (loading) {
     return (
-      <Box>
-        <Text>hi</Text>
-      </Box>
+      <VStack h="100%" justifyContent="center">
+        <Spinner />
+      </VStack>
     );
+  }
 
   return (
     <VStack h="100%">
@@ -99,7 +110,7 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
         </Box>
       </HStack>
       <ScrollView flex={1} px={4}>
-        {workout?.exercises.map((exercise, idx) => (
+        {workout?.workoutData.map((exercise, idx) => (
           <Box pb={4} key={idx}>
             <Exercise
               exercise={exercise.exerciseTemplate}
