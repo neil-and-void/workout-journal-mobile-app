@@ -1,47 +1,33 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Box, Button, Text, VStack } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import Set from '../../components/Set';
 import ExerciseContext from '../../contexts/exerciseContext';
-import { useFocusEffect } from '@react-navigation/native';
-import { getExercise } from '../../services/exercises';
+import SetService from '../../services/SetService';
 
 const SetsInput = () => {
   const { exerciseTemplate, exercise, sets, setExerciseData } =
     useContext<ExerciseContext>(ExerciseContext);
-
-  // const getExerciseData = async () => {
-  //   const exerciseData = await getExercise(exercise.id);
-  //   console.log(exerciseData);
-  //   // setExerciseData()
-  // };
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     getExerciseData();
-  //   }, [])
-  // );
-
-  // console.log('hi', sets, exerciseTemplate, exercise, '###');
-
   const handleDelete = () => {
     console.log('jfkds');
   };
 
-  const handleWeightChange = (weight: string, idx: number) => {
+  const handleWeightChange = (weight: number, idx: number) => {
     const newSetArray = [...sets];
-    const newSet = { ...newSetArray[idx], weight };
+    const newSet = { ...newSetArray[idx], weight: Number(weight) };
     newSetArray.splice(idx, 1, newSet);
     setExerciseData(exercise, exerciseTemplate, newSetArray);
-    // TODO update set in backend
+    const { reps, id } = newSet;
+    SetService.updateSet(id, reps, weight);
   };
 
-  const handleRepsChange = (reps: string, idx: number) => {
+  const handleRepsChange = (reps: number, idx: number) => {
     const newSetArray = [...sets];
-    const newSet = { ...sets[idx], reps };
+    const newSet = { ...sets[idx], reps: Number(reps) };
     newSetArray.splice(idx, 1, newSet);
     setExerciseData(exercise, exerciseTemplate, newSetArray);
-    // TODO update set in backend
+    const { weight, id } = newSet;
+    SetService.updateSet(id, reps, weight);
   };
 
   return (
@@ -60,8 +46,10 @@ const SetsInput = () => {
               <Box pb={4} key={idx}>
                 <Set
                   set={set}
-                  onRepsChange={(reps) => handleRepsChange(reps, idx)}
-                  onWeightChange={(weight) => handleWeightChange(weight, idx)}
+                  onRepsChange={(reps) => handleRepsChange(Number(reps), idx)}
+                  onWeightChange={(weight) =>
+                    handleWeightChange(Number(weight), idx)
+                  }
                   onDelete={handleDelete}
                 />
               </Box>

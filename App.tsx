@@ -2,22 +2,23 @@ import 'react-native-gesture-handler'; // needs to be at the top
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeBaseProvider, extendTheme, Button } from 'native-base';
+import * as SecureStore from 'expo-secure-store';
+import { StatusBar } from 'expo-status-bar';
+
 import Signup from './src/screens/Signup';
 import Login from './src/screens/Login';
 import Home from './src/screens/Home';
-import { NativeBaseProvider, extendTheme, Button } from 'native-base';
-import { StatusBar } from 'expo-status-bar';
 import NewWorkoutTemplateFlow from './src/screens/NewWorkoutTemplateFlow';
-import { theme } from './src/theme';
-import * as SecureStore from 'expo-secure-store';
-import UserAuthContext from './src/contexts/userContext';
 import ViewWorkoutTemplate from './src/screens/ViewWorkoutTemplate';
 import WorkoutSession from './src/screens/WorkoutSession/WorkoutSession';
-import WorkoutSessionContext from './src/contexts/workoutSessionContext';
 import SetsInput from './src/screens/SetsInput';
+import UserAuthContext from './src/contexts/userContext';
+import WorkoutSessionContext from './src/contexts/workoutSessionContext';
 import ExerciseContext from './src/contexts/exerciseContext';
 import ViewWorkoutTemplateContext from './src/contexts/viewWorkoutTemplateContext';
-import { createSet } from './src/services/sets';
+import SetService from './src/services/SetService';
+import { theme } from './src/theme';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,7 +57,7 @@ export default function App() {
   };
 
   const addSet = async (newSet) => {
-    const set = await createSet(newSet);
+    const set = await SetService.createSet(newSet);
     setExercise({ ...exercise, sets: [...exercise.sets, set] });
   };
 
