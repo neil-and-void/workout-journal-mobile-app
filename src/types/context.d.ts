@@ -7,7 +7,7 @@ interface ViewWorkoutTemplateContext {
   id: number;
   name: string;
   exerciseTemplates: ExerciseTemplate[];
-  setTemplateData: (workoutTemplate: WorkoutTemplate) => void;
+  setViewWorkoutTemplateData: (workoutTemplate: WorkoutTemplate) => void;
 }
 interface UserContext {
   signedOut: boolean;

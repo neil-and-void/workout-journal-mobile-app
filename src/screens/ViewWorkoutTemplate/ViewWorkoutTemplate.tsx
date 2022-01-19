@@ -1,16 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { VStack, Box, Button, ScrollView, Text } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import ViewWorkoutTemplateContext from '../../contexts/viewWorkoutTemplateContext';
 
 import Exercise from '../../components/ExerciseTemplate';
 import { startNewWorkout } from '../../services/workouts';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ViewWorkoutTemplate = ({
   navigation,
 }: NativeStackScreenProps<any, any>) => {
   const { name, exerciseTemplates, id } =
-    useContext<WorkoutTemplateContext>(viewWorkoutContext);
+    useContext<ViewWorkoutTemplateContext>(ViewWorkoutTemplateContext);
 
+  /**
+   * begin workout with the workout template by the given id
+   */
   const startWorkoutSession = async () => {
     await startNewWorkout(id);
     navigation.navigate('WorkoutSession');

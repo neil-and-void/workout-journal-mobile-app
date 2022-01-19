@@ -9,12 +9,17 @@ import { Box, HStack, ScrollView, VStack, Text, Button } from 'native-base';
 import WorkoutTemplate from '../../components/WorkoutTemplate';
 import theme from '../../theme';
 import TemplateService from '../../services/TemplateService';
+import ViewWorkoutTemplateContext from '../../contexts/viewWorkoutTemplateContext';
 
 const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutTemplate[]>(
     []
+  );
+
+  const { setViewWorkoutTemplateData } = useContext<ViewWorkoutTemplateContext>(
+    ViewWorkoutTemplateContext
   );
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -65,9 +70,11 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
   /**
    * navigate to screen to view workout template
    */
-  const viewWorkoutTemplate = (workoutTemplateId: number) => {
+  const viewWorkoutTemplate = (workoutTemplate: WorkoutTemplate) => {
     navigation.navigate('ViewWorkoutTemplate');
-    // setTemplateData(workoutTemplate);
+    setViewWorkoutTemplateData({
+      ...workoutTemplate,
+    });
   };
 
   /**
@@ -132,7 +139,7 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
                 >
                   <WorkoutTemplate
                     workout={workoutTemplate}
-                    onPress={() => viewWorkoutTemplate(workoutTemplate.id)}
+                    onPress={() => viewWorkoutTemplate(workoutTemplate)}
                   />
                 </Swipeable>
               </Box>

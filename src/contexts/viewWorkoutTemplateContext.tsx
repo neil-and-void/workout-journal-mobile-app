@@ -8,7 +8,7 @@ const ViewWorkoutTemplateContext =
     id: -1,
     name: '',
     exerciseTemplates: [],
-    setTemplateData: () => {},
+    setViewWorkoutTemplateData: (workoutTemplate: WorkoutTemplate) => {},
   });
 
 export default ViewWorkoutTemplateContext;
