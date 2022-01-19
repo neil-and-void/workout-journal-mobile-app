@@ -69,7 +69,7 @@ export default function App() {
   const setExerciseData = (
     exercise: Exercise,
     exerciseTemplate: ExerciseTemplate,
-    sets: Set[]
+    sets: ExerciseSet[]
   ) => {
     setExercise({
       exercise,

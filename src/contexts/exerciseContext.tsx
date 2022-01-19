@@ -10,7 +10,7 @@ const ExerciseContext = React.createContext<ExerciseContext>({
   setExerciseData: (
     exercise: Exercise,
     exerciseTemplate: ExerciseTemplate,
-    sets: Set[]
+    sets: ExerciseSet[]
   ) => {},
 });
 

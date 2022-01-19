@@ -60,9 +60,9 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
     });
   };
 
-  const doExercise = (exerciseTemplate, exercise) => {
+  const doExercise = (exerciseTemplate, exercise, exerciseSet) => {
     navigation.navigate('SetsInput');
-    setExerciseData(exercise, exerciseTemplate, []);
+    setExerciseData(exercise, exerciseTemplate, exerciseSet);
   };
 
   /**
@@ -115,7 +115,11 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
             <Exercise
               exercise={exercise.exerciseTemplate}
               onPress={() =>
-                doExercise(exercise.exerciseTemplate, exercise.exercise)
+                doExercise(
+                  exercise.exerciseTemplate,
+                  exercise.exercise,
+                  exercise.sets
+                )
               }
               sets={exercise.sets}
             />

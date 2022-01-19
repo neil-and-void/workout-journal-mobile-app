@@ -17,7 +17,7 @@ interface UserContext {
 interface ExerciseContext {
   exerciseTemplate: ExerciseTemplate | null;
   exercise: Exercise | null;
-  sets: Set[];
+  sets: ExerciseSet[];
   setExerciseData: (
     exercise: Exercise,
     exerciseTemplate: ExerciseTemplate,

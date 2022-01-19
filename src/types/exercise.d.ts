@@ -7,5 +7,5 @@ interface Exercise {
 interface ExerciseSession {
   exerciseTemplate: ExerciseTemplate | null;
   exercise: Exercise | null;
-  sets: Set[];
+  sets: ExerciseSet[];
 }

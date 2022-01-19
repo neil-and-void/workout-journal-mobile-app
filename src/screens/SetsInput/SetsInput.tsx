@@ -7,35 +7,60 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getExercise } from '../../services/exercises';
 
 const SetsInput = () => {
-  const { exerciseTemplate, exercise } =
+  const { exerciseTemplate, exercise, sets, setExerciseData } =
     useContext<ExerciseContext>(ExerciseContext);
-  const [sets, setSets] = useState([]);
 
-  console.log(sets);
+  // const getExerciseData = async () => {
+  //   const exerciseData = await getExercise(exercise.id);
+  //   console.log(exerciseData);
+  //   // setExerciseData()
+  // };
 
-  const getExerciseData = async () => {
-    const exerciseData = await getExercise(exercise?.id);
-    setSets(exerciseData.sets);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     getExerciseData();
+  //   }, [])
+  // );
+
+  // console.log('hi', sets, exerciseTemplate, exercise, '###');
+
+  const handleDelete = () => {
+    console.log('jfkds');
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      getExerciseData();
-    }, [])
-  );
+  const handleWeightChange = (weight: string) => {
+    console.log(weight);
+  };
+
+  const handleRepsChange = (reps: string) => {
+    console.log(reps, typeof reps);
+  };
 
   return (
     <VStack px={4} h="100%" safeAreaBottom>
       <Text fontSize={48} fontWeight="500">
         Squat
       </Text>
-      <ScrollView flex={1}>
-        {sets.map((set, idx) => (
-          <Box pb={4} key={idx}>
-            <Set set={set} />
+      <Box h="100%">
+        {sets.length === 0 ? (
+          <Box>
+            <Text>No sets yet</Text>
           </Box>
-        ))}
-      </ScrollView>
+        ) : (
+          <ScrollView>
+            {sets.map((set, idx) => (
+              <Box pb={4} key={idx}>
+                <Set
+                  set={set}
+                  onRepsChange={handleRepsChange}
+                  onWeightChange={handleWeightChange}
+                  onDelete={handleDelete}
+                />
+              </Box>
+            ))}
+          </ScrollView>
+        )}
+      </Box>
       <Box pb={8}>
         <Button>Done</Button>
       </Box>

@@ -1,6 +1,6 @@
 import api from './api';
 
-export const createSet = async (setData: Set) => {
+export const createSet = async (setData: ExerciseSet) => {
   const res = await api.post('/sets', setData);
   return res.data;
 };

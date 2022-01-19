@@ -5,7 +5,7 @@ import { Pressable } from 'react-native';
 
 interface ExerciseProps {
   exercise: ExerciseTemplate;
-  sets: Set[];
+  sets: ExerciseSet[];
   onPress: () => void;
 }
 
