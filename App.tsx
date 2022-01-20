@@ -234,8 +234,8 @@ export default function App() {
                               variant="unstyled"
                               onPress={async () =>
                                 await addSet({
-                                  reps: 0,
-                                  weight: 0.0,
+                                  reps: null,
+                                  weight: null,
                                   exerciseId: exercise?.exercise.id,
                                 })
                               }
