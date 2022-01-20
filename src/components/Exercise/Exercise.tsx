@@ -34,7 +34,7 @@ const Exercise = ({ exercise, onPress, sets }: ExerciseProps) => {
           sets.map((set, idx) => (
             <HStack key={idx} alignItems="baseline">
               <Text fontSize={24} fontWeight="600">
-                8
+                {set.reps ? set.reps : 0}
                 <Text fontSize={16} fontWeight="400">
                   {' '}
                   reps
@@ -42,7 +42,7 @@ const Exercise = ({ exercise, onPress, sets }: ExerciseProps) => {
               </Text>
               <Text fontSize={24}>{' x '}</Text>
               <Text fontSize={24} fontWeight="600">
-                225
+                {set.weight ? set.weight : 0}
                 <Text fontSize={16} fontWeight="400">
                   {' '}
                   lbs

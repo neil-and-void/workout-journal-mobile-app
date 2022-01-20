@@ -13,10 +13,10 @@ const Set = ({ set, onWeightChange, onRepsChange, onDelete }: SetProps) => {
     <HStack>
       <HStack flex={1} pr={4} flexGrow={1} alignItems="center">
         <Input
-          keyboardType="numeric"
+          keyboardType="number-pad"
           placeholder="reps"
           onChangeText={onRepsChange}
-          value={String(set.reps)}
+          value={set.reps ? String(set.reps) : ''}
           fontSize={16}
           borderWidth={0}
           borderRadius={16}
@@ -32,7 +32,7 @@ const Set = ({ set, onWeightChange, onRepsChange, onDelete }: SetProps) => {
           keyboardType="numeric"
           placeholder="weight"
           onChangeText={onWeightChange}
-          value={String(set.weight)}
+          value={set.weight ? String(set.weight) : ''}
           fontSize={16}
           borderWidth={0}
           backgroundColor="gray.200"
