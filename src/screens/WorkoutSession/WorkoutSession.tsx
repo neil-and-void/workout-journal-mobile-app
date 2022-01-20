@@ -19,6 +19,7 @@ import Exercise from '../../components/Exercise';
 import ExerciseContext from '../../contexts/exerciseContext';
 import WorkoutService from '../../services/WorkoutService';
 import { useFocusEffect } from '@react-navigation/native';
+import { RefreshControl } from 'react-native';
 
 const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const { workout, setWorkoutSessionData } = useContext<WorkoutSessionContext>(
@@ -40,6 +41,7 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
 
   useFocusEffect(
     useCallback(() => {
+      if (workout) return;
       getWorkoutData();
     }, [])
   );
@@ -60,9 +62,19 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
     });
   };
 
-  const doExercise = (exerciseTemplate, exercise, exerciseSet) => {
+  /**
+   *
+   * @param exerciseTemplate exercise template to view
+   * @param exercise exercise to be done
+   * @param set list of sets
+   */
+  const doExercise = (
+    exerciseTemplate: ExerciseTemplate,
+    exercise: Exercise,
+    set: ExerciseSet[]
+  ) => {
     navigation.navigate('SetsInput');
-    setExerciseData(exercise, exerciseTemplate, exerciseSet);
+    setExerciseData(exercise, exerciseTemplate, set);
   };
 
   /**
@@ -74,14 +86,6 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const formatTime = (time: number) => {
     return String(time).padStart(2, '0');
   };
-
-  if (loading) {
-    return (
-      <VStack h="100%" justifyContent="center">
-        <Spinner />
-      </VStack>
-    );
-  }
 
   return (
     <VStack h="100%">
@@ -109,7 +113,13 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
           </Button>
         </Box>
       </HStack>
-      <ScrollView flex={1} px={4}>
+      <ScrollView
+        flex={1}
+        px={4}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={getWorkoutData} />
+        }
+      >
         {workout?.workoutData.map((exercise, idx) => (
           <Box pb={4} key={idx}>
             <Exercise

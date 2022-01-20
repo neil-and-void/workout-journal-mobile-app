@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback, useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -10,6 +10,8 @@ import WorkoutTemplate from '../../components/WorkoutTemplate';
 import theme from '../../theme';
 import TemplateService from '../../services/TemplateService';
 import ViewWorkoutTemplateContext from '../../contexts/viewWorkoutTemplateContext';
+import WorkoutService from '../../services/WorkoutService';
+import WorkoutSessionContext from '../../contexts/workoutSessionContext';
 
 const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,7 +19,9 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutTemplate[]>(
     []
   );
-
+  const { workout, setWorkoutSessionData } = useContext<WorkoutSessionContext>(
+    WorkoutSessionContext
+  );
   const { setViewWorkoutTemplateData } = useContext<ViewWorkoutTemplateContext>(
     ViewWorkoutTemplateContext
   );
@@ -34,8 +38,11 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
       // get workout templates and populate with exercise templates
       const data = await TemplateService.getWorkoutTemplates();
 
+      const activeWorkoutData = await WorkoutService.getActiveWorkout();
+      setWorkoutSessionData(activeWorkoutData);
+
       const workoutTemplateData = await Promise.all(
-        data.map(async (workoutTemplate: WorkoutTemplate, idx: number) => {
+        data.map(async (workoutTemplate: WorkoutTemplate) => {
           const exerciseTemplates = await TemplateService.getExercisesTemplates(
             workoutTemplate.id
           );
@@ -86,6 +93,17 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
       await TemplateService.deleteWorkoutTemplate(workoutTemplateId);
       await getWorkoutTemplates();
     } catch (err) {}
+  };
+
+  const handleWorkoutTemplateClick = (
+    isActiveWorkout: boolean,
+    workoutTemplate: WorkoutTemplate
+  ) => {
+    if (isActiveWorkout) {
+      navigation.navigate('WorkoutSession');
+    } else {
+      viewWorkoutTemplate(workoutTemplate);
+    }
   };
 
   return (
@@ -139,7 +157,17 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
                 >
                   <WorkoutTemplate
                     workout={workoutTemplate}
-                    onPress={() => viewWorkoutTemplate(workoutTemplate)}
+                    isActive={
+                      workout.activeWorkout.workout_template_id ===
+                      workoutTemplate.id
+                    }
+                    onPress={() =>
+                      handleWorkoutTemplateClick(
+                        workout.activeWorkout.workout_template_id ===
+                          workoutTemplate.id,
+                        workoutTemplate
+                      )
+                    }
                   />
                 </Swipeable>
               </Box>
