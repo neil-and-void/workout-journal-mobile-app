@@ -2,7 +2,7 @@ import api from './api';
 
 export default class WorkoutService {
   /**
-   *
+   * POST request start a new workout
    * @param workoutTemplateId
    * @returns
    */
@@ -12,7 +12,7 @@ export default class WorkoutService {
   };
 
   /**
-   *
+   * GET data of active workout
    * @returns workout data
    */
   static getActiveWorkout = async () => {
@@ -20,6 +20,12 @@ export default class WorkoutService {
     return res.data;
   };
 
-  // TODO
-  static endWorkout = () => {};
+  /**
+   * PUT set current active workout to inactive
+   * @returns response of the endActiveWorkout endpoint
+   */
+  static endWorkout = async () => {
+    const res = await api.get('/workouts/endActiveWorkout');
+    return res.data;
+  };
 }
