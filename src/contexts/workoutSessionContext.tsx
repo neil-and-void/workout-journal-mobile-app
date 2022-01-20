@@ -4,8 +4,9 @@ import React from 'react';
  * Context to to provide workout session data
  */
 const WorkoutSessionContext = React.createContext<WorkoutSessionContext>({
-  workout: null,
-  setWorkoutSessionData: (workout: Workout) => {},
+  activeWorkout: null,
+  workoutData: [],
+  setWorkoutSessionData: ({ workout: Workout, workoutData: WorkoutData }) => {},
 });
 
 export default WorkoutSessionContext;

@@ -22,9 +22,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { RefreshControl } from 'react-native';
 
 const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const { workout, setWorkoutSessionData } = useContext<WorkoutSessionContext>(
-    WorkoutSessionContext
-  );
+  const { workoutData, setWorkoutSessionData } =
+    useContext<WorkoutSessionContext>(WorkoutSessionContext);
   const { setExerciseData } = useContext<ExerciseContext>(ExerciseContext);
   const [minutes, setMinutes] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -41,7 +40,7 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (workout) return;
+      if (workoutData) return;
       getWorkoutData();
     }, [])
   );
@@ -49,6 +48,7 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const getWorkoutData = async () => {
     setLoading(true);
     const workoutData = await WorkoutService.getActiveWorkout();
+    console.log(workoutData);
     setWorkoutSessionData(workoutData);
     setLoading(false);
   };
@@ -56,7 +56,8 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
   /**
    * save end time to database and navigate back to workouts screen
    */
-  const finishWorkout = () => {
+  const finishWorkout = async () => {
+    await WorkoutService.endWorkout();
     navigation.navigate('Home', {
       screen: 'Workouts',
     });
@@ -120,7 +121,7 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
           <RefreshControl refreshing={loading} onRefresh={getWorkoutData} />
         }
       >
-        {workout?.workoutData.map((exercise, idx) => (
+        {workoutData.map((exercise, idx) => (
           <Box pb={4} key={idx}>
             <Exercise
               exercise={exercise.exerciseTemplate}

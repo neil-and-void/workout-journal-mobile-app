@@ -1,5 +1,6 @@
 interface WorkoutSessionContext {
-  workout: Workout | null;
+  activeWorkout: Workout | null;
+  workoutData: WorkoutData[];
   setWorkoutSessionData: (workout: Workout) => void;
 }
 

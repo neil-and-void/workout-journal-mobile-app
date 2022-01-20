@@ -40,7 +40,10 @@ export default function App() {
       name: '',
       exerciseTemplates: [],
     });
-  const [workoutSession, setWorkoutSession] = useState<Workout | null>(null);
+  const [workoutSession, setWorkoutSession] = useState<WorkoutSession>({
+    activeWorkout: null,
+    workoutData: [],
+  });
   const [exercise, setExercise] = useState<ExerciseSession>({
     exerciseTemplate: null,
     exercise: null,
@@ -124,7 +127,7 @@ export default function App() {
     <ExerciseContext.Provider value={{ ...exercise, setExerciseData }}>
       <WorkoutSessionContext.Provider
         value={{
-          workout: workoutSession ? workoutSession : null,
+          ...workoutSession,
           setWorkoutSessionData: setWorkoutSessionData,
         }}
       >
