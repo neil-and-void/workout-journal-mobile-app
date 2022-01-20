@@ -1,8 +1,9 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import { BASE_URL_LOCAL } from '../../config/config';
 
 const instance = axios.create({
-  baseURL: 'http://192.168.1.72:8000/api',
+  baseURL: BASE_URL_LOCAL,
   headers: {
     'Content-Type': 'application/json',
   },
