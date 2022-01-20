@@ -1,24 +1,17 @@
-import axios from 'axios';
-
+import api from './api';
 export default class AuthService {
   static signup = async (user: SignupCredentials) => {
-    const res = await axios.post(
-      `http://192.168.1.72:8000/api/auth/signup`,
-      user
-    );
+    const res = await api.post(`/auth/signup`, user);
     return res.data;
   };
 
   static login = async (user: LoginCredentials) => {
-    const res = await axios.post(
-      `http://192.168.1.72:8000/api/auth/token`,
-      user
-    );
+    const res = await api.post(`/auth/token`, user);
     return res.data;
   };
 
   static refreshToken = async (refreshToken: string) => {
-    const res = await axios.post(`127.0.0.1:8000/api/auth/refreshToken`, {
+    const res = await api.post(`/auth/refreshToken`, {
       refreshToken,
     });
     return res.data;
