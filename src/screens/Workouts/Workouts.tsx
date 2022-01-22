@@ -134,7 +134,7 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
           <ScrollView
             _contentContainerStyle={{
               h: '100%',
-              paddingX: 4,
+              paddingX: 6,
             }}
             refreshControl={
               <RefreshControl

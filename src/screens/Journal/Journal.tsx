@@ -15,7 +15,7 @@ const Journal = () => {
       flex={1}
       safeArea
     >
-      <HStack justifyContent="space-between">
+      <HStack justifyContent="space-between" px={6}>
         <Text fontSize={48} fontWeight={700}>
           Journal
         </Text>
@@ -29,7 +29,12 @@ const Journal = () => {
         </Button>
       </HStack>
       <Box flexGrow={1}>
-        <ScrollView height="100%">
+        <ScrollView
+          _contentContainerStyle={{
+            h: '100%',
+            paddingX: 6,
+          }}
+        >
           <Box pb={4}>
             <Workout />
           </Box>
