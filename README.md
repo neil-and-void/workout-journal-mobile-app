@@ -1,3 +1,3 @@
-![IMG_4538 (1)](https://user-images.githubusercontent.com/46465568/150632230-4dfd97c6-e863-4241-9400-899206f24319.png)
+![IMG_4538 (2)](https://user-images.githubusercontent.com/46465568/150632255-90cb43cc-e4c9-4d84-9cbe-7f8a879c3945.png)
 # workout-journal-mobile-app
 Workout journal for keeping track of workout progress
