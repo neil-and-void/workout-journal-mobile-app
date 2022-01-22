@@ -12,6 +12,17 @@ export default class WorkoutService {
   };
 
   /**
+   * GET workouts of the user
+   * @param page
+   * @param count
+   * @returns list of workouts sorted by most recent
+   */
+  static getWorkouts = async (page: number, count: number) => {
+    const res = await api.get('/workouts');
+    return res.data;
+  };
+
+  /**
    * GET data of active workout
    * @returns workout data
    */
