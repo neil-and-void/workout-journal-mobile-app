@@ -1,13 +1,49 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Dimensions } from 'react-native';
 import { ScrollView, Box, Text, HStack, Button } from 'native-base';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useFocusEffect } from '@react-navigation/native';
 
 import Workout from '../../components/Workout';
 import theme from '../../theme';
+import WorkoutService from '../../services/WorkoutService';
+import TemplateService from '../../services/TemplateService';
 
-const Journal = () => {
+const Journal = ({ navigation }: NativeStackScreenProps<any, any>) => {
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
+  const [workoutTemplatesNames, setWorkoutTemplatesNames] = useState({});
+
   const tabBarHeight = useBottomTabBarHeight();
+
+  useFocusEffect(
+    useCallback(() => {
+      getWorkouts();
+      getWorkoutTemplates();
+    }, [])
+  );
+
+  const getWorkouts = async () => {
+    const workouts = await WorkoutService.getWorkouts(0, 10);
+    setWorkouts(workouts);
+  };
+
+  const getWorkoutTemplates = async () => {
+    const workoutTemplates = await TemplateService.getWorkoutTemplates();
+
+    const names = {};
+
+    workoutTemplates.forEach((workoutTemplate) => {
+      names[String(workoutTemplate.id)] = workoutTemplate.name;
+    });
+
+    console.log('hi', names);
+    setWorkoutTemplatesNames(names);
+  };
+
+  const viewWorkout = () => {
+    navigation.navigate('ViewWorkout');
+  };
 
   return (
     <Box
@@ -35,51 +71,15 @@ const Journal = () => {
             paddingX: 6,
           }}
         >
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
-          <Box pb={4}>
-            <Workout />
-          </Box>
+          {workouts.map((workout, idx) => (
+            <Box pb={4} key={idx}>
+              <Workout
+                name={workoutTemplatesNames[workout.workout_template_id]}
+                workout={workout}
+                onPress={() => viewWorkout()}
+              />
+            </Box>
+          ))}
         </ScrollView>
       </Box>
     </Box>

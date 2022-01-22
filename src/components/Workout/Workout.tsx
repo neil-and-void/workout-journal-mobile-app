@@ -1,9 +1,17 @@
 import React from 'react';
 import { Box, Text, Pressable, HStack, VStack } from 'native-base';
 
-const Workout = () => {
+interface WorkoutProps {
+  onPress: () => void;
+  workout: Workout;
+  name: string;
+}
+
+const Workout = ({ onPress, workout, name }: WorkoutProps) => {
+  const date = new Date(workout.started);
+
   return (
-    <Pressable onPress={() => console.log('1234')}>
+    <Pressable onPress={onPress}>
       <HStack>
         <VStack
           borderTopWidth={1}
@@ -14,18 +22,20 @@ const Workout = () => {
         >
           <Box px={3}>
             <Text fontSize={32} fontWeight={600}>
-              20
+              {date.getDate()}
             </Text>
           </Box>
           <Box backgroundColor="primary.400" borderBottomRadius={16}>
             <Text fontSize={16} color="white" textAlign="center">
-              Dec
+              {date.toLocaleString('default', {
+                month: 'short',
+              })}
             </Text>
           </Box>
         </VStack>
         <VStack pl={4} justifyContent="center">
           <Text fontWeight={500} fontSize={20}>
-            Legs
+            {name}
           </Text>
         </VStack>
       </HStack>
