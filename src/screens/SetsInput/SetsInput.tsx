@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Box, Button, Text, VStack } from 'native-base';
+import { Box, Button, HStack, Text, VStack } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import Set from '../../components/Set';
 import ExerciseContext from '../../contexts/exerciseContext';
@@ -33,13 +33,15 @@ const SetsInput = () => {
   return (
     <VStack px={4} h="100%" safeAreaBottom>
       <Text fontSize={48} fontWeight="500">
-        Squat
+        {exerciseTemplate.name}
       </Text>
       <Box h="100%">
         {sets.length === 0 ? (
-          <Box>
-            <Text>No sets yet</Text>
-          </Box>
+          <HStack justifyContent="center">
+            <Text fontSize="lg" color="muted.400">
+              No sets entered yet
+            </Text>
+          </HStack>
         ) : (
           <ScrollView>
             {sets.map((set, idx) => (
