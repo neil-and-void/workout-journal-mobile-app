@@ -19,6 +19,7 @@ import ExerciseContext from './src/contexts/exerciseContext';
 import ViewWorkoutTemplateContext from './src/contexts/viewWorkoutTemplateContext';
 import SetService from './src/services/SetService';
 import { theme } from './src/theme';
+import ViewWorkout from './src/screens/ViewWorkout';
 
 const Stack = createNativeStackNavigator();
 
@@ -253,6 +254,28 @@ export default function App() {
                           ),
                           headerShadowVisible: false,
                           title: 'Sets',
+                          animationEnabled: false,
+                        })}
+                      />
+                      <Stack.Screen
+                        name="ViewWorkout"
+                        component={ViewWorkout}
+                        options={({ navigation }) => ({
+                          headerLeft: () => (
+                            <Button
+                              variant="unstyled"
+                              onPress={() => navigation.goBack()}
+                              _text={{
+                                color: 'primary.500',
+                                fontSize: 18,
+                                fontWeight: 400,
+                              }}
+                            >
+                              Back
+                            </Button>
+                          ),
+                          headerShadowVisible: false,
+                          title: 'Workout',
                           animationEnabled: false,
                         })}
                       />
