@@ -25,3 +25,9 @@ interface ExerciseContext {
     sets: Sets[]
   ) => void;
 }
+
+interface ViewWorkoutContext {
+  workout: Workout | null;
+  workoutData: WorkoutData[];
+  setViewWorkoutData: (workout: WorkoutData) => void;
+}

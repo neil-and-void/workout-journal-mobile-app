@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { Dimensions } from 'react-native';
 import { ScrollView, Box, Text, HStack, Button } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -9,11 +9,13 @@ import Workout from '../../components/Workout';
 import theme from '../../theme';
 import WorkoutService from '../../services/WorkoutService';
 import TemplateService from '../../services/TemplateService';
+import ViewWorkoutContext from '../../contexts/viewWorkoutContext';
 
 const Journal = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [workoutTemplatesNames, setWorkoutTemplatesNames] = useState({});
-
+  const { setViewWorkoutData } =
+    useContext<ViewWorkoutContext>(ViewWorkoutContext);
   const tabBarHeight = useBottomTabBarHeight();
 
   useFocusEffect(
@@ -37,7 +39,6 @@ const Journal = ({ navigation }: NativeStackScreenProps<any, any>) => {
       names[String(workoutTemplate.id)] = workoutTemplate.name;
     });
 
-    console.log('hi', names);
     setWorkoutTemplatesNames(names);
   };
 

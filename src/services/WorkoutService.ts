@@ -12,6 +12,16 @@ export default class WorkoutService {
   };
 
   /**
+   * GET request workout to retrieve
+   * @param workoutId id of the workout to get
+   * @returns workout
+   */
+  static getWorkout = async (workoutId: number) => {
+    const res = await api.get(`/workouts/${workoutId}`);
+    return res.data;
+  };
+
+  /**
    * GET workouts of the user
    * @param page
    * @param count

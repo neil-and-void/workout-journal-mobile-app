@@ -8,7 +8,7 @@ interface WorkoutProps {
 }
 
 const Workout = ({ onPress, workout, name }: WorkoutProps) => {
-  const date = new Date(workout.started);
+  const date = new Date(workout.started + 'Z');
 
   return (
     <Pressable onPress={onPress}>
@@ -36,6 +36,13 @@ const Workout = ({ onPress, workout, name }: WorkoutProps) => {
         <VStack pl={4} justifyContent="center">
           <Text fontWeight={500} fontSize={20}>
             {name}
+          </Text>
+          <Text>
+            {date.toLocaleString('en-US', {
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            })}
           </Text>
         </VStack>
       </HStack>

@@ -22,12 +22,14 @@ const Exercise = ({ exercise, onPress, sets }: ExerciseProps) => {
         <Text fontSize={24} fontWeight={600} color="lightText">
           {exercise.name}
         </Text>
-        <Pressable onPress={onPress}>
-          <Text color="lightText" fontSize={16}>
-            Edit sets{' '}
-            <Icon as={Ionicons} name="pencil" color="white" size={4}></Icon>
-          </Text>
-        </Pressable>
+        {onPress ? (
+          <Pressable onPress={onPress}>
+            <Text color="lightText" fontSize={16}>
+              Edit sets{' '}
+              <Icon as={Ionicons} name="pencil" color="white" size={4}></Icon>
+            </Text>
+          </Pressable>
+        ) : null}
       </HStack>
       <Box px={4} py={2}>
         {sets.length > 0 ? (

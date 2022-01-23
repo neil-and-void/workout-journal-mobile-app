@@ -4,7 +4,7 @@ import { Button } from 'native-base';
 const WorkoutTemplateActions = () => {
   return (
     <Button
-      onPress={() => console.log('hsjfjfjfj')}
+      onPress={() => console.log('template actions')}
       borderRadius={16}
       backgroundColor="red.500"
     >
