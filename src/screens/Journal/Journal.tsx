@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, RefreshControl } from 'react-native';
 import { ScrollView, Box, Text, HStack, Button } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -9,28 +9,29 @@ import Workout from '../../components/Workout';
 import theme from '../../theme';
 import WorkoutService from '../../services/WorkoutService';
 import TemplateService from '../../services/TemplateService';
-import ViewWorkoutContext from '../../contexts/viewWorkoutContext';
 
 const Journal = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [workoutTemplatesNames, setWorkoutTemplatesNames] = useState({});
-  const { setViewWorkoutData } =
-    useContext<ViewWorkoutContext>(ViewWorkoutContext);
+  const [loading, setLoading] = useState<boolean>(false);
   const tabBarHeight = useBottomTabBarHeight();
 
-  useFocusEffect(
-    useCallback(() => {
-      getWorkouts();
-      getWorkoutTemplates();
-    }, [])
-  );
+  // useFocusEffect(
+  // useCallback(() => {
+  //   if (workouts.length === 0) {
+  //     getWorkoutData();
+  //   }
+  // }, [])
+  // );
 
-  const getWorkouts = async () => {
+  const getWorkoutData = async () => {
+    setLoading(true);
+
+    // get previous workouts
     const workouts = await WorkoutService.getWorkouts(0, 10);
     setWorkouts(workouts);
-  };
 
-  const getWorkoutTemplates = async () => {
+    // get names of workout templates
     const workoutTemplates = await TemplateService.getWorkoutTemplates();
 
     const names = {};
@@ -40,6 +41,8 @@ const Journal = ({ navigation }: NativeStackScreenProps<any, any>) => {
     });
 
     setWorkoutTemplatesNames(names);
+
+    setLoading(false);
   };
 
   const viewWorkout = () => {
@@ -67,6 +70,9 @@ const Journal = ({ navigation }: NativeStackScreenProps<any, any>) => {
       </HStack>
       <Box flexGrow={1}>
         <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={getWorkoutData} />
+          }
           _contentContainerStyle={{
             h: '100%',
             paddingX: 6,
