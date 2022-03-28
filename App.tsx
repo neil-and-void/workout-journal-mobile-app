@@ -5,7 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeBaseProvider, extendTheme, Button } from 'native-base';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
+import { ApolloProvider } from '@apollo/client';
 
+import { client } from './src/graphql/client';
 import Signup from './src/screens/Signup';
 import Login from './src/screens/Login';
 import Home from './src/screens/Home';
@@ -138,172 +140,174 @@ export default function App() {
   }, []);
 
   return (
-    <ExerciseContext.Provider value={{ ...exercise, setExerciseData }}>
-      <WorkoutSessionContext.Provider
-        value={{
-          ...workoutSession,
-          setWorkoutSessionData: setWorkoutSessionData,
-        }}
-      >
-        <ViewWorkoutTemplateContext.Provider
-          value={{ ...viewWorkoutTemplate, setViewWorkoutTemplateData }}
+    <ApolloProvider client={client}>
+      <ExerciseContext.Provider value={{ ...exercise, setExerciseData }}>
+        <WorkoutSessionContext.Provider
+          value={{
+            ...workoutSession,
+            setWorkoutSessionData: setWorkoutSessionData,
+          }}
         >
-          <UserAuthContext.Provider
-            value={{ ...userAuth, setUserData: setUserAuthData }}
+          <ViewWorkoutTemplateContext.Provider
+            value={{ ...viewWorkoutTemplate, setViewWorkoutTemplateData }}
           >
-            <ViewWorkoutContext.Provider
-              value={{ ...viewWorkout, setViewWorkoutData }}
+            <UserAuthContext.Provider
+              value={{ ...userAuth, setUserData: setUserAuthData }}
             >
-              <NativeBaseProvider theme={extendTheme(theme)}>
-                <StatusBar style="dark" />
-                <NavigationContainer theme={Theme}>
-                  <Stack.Navigator>
-                    {/* only show authorized screens if user is authenticated */}
-                    {userAuth.signedOut ? (
-                      <>
-                        <Stack.Screen
-                          name="Login"
-                          component={Login}
-                          options={{ headerShown: false }}
-                        />
-                        <Stack.Screen
-                          name="Signup"
-                          component={Signup}
-                          options={{ headerShown: false }}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <Stack.Screen
-                          name="Home"
-                          component={Home}
-                          options={{ headerShown: false }}
-                        />
-                        <Stack.Screen
-                          name="NewWorkoutTemplateFlow"
-                          component={NewWorkoutTemplateFlow}
-                          options={{ headerShown: false }}
-                        />
-                        <Stack.Screen
-                          name="ViewWorkoutTemplate"
-                          component={ViewWorkoutTemplate}
-                          options={({ navigation }) => ({
-                            headerLeft: () => (
-                              <Button
-                                variant="unstyled"
-                                onPress={() => navigation.goBack()}
-                                _text={{
-                                  color: 'primary.500',
-                                  fontSize: 18,
-                                  fontWeight: 400,
-                                }}
-                              >
-                                Back
-                              </Button>
-                            ),
-                            headerShadowVisible: false,
-                            title: 'Workout Template',
-                            animationEnabled: false,
-                          })}
-                        />
-                        <Stack.Screen
-                          name="WorkoutSession"
-                          component={WorkoutSession}
-                          options={({ navigation }) => ({
-                            headerLeft: () => (
-                              <Button
-                                variant="unstyled"
-                                onPress={() =>
-                                  navigation.navigate('Home', {
-                                    screen: 'Workouts',
-                                  })
-                                }
-                                _text={{
-                                  color: 'primary.500',
-                                  fontSize: 18,
-                                  fontWeight: 400,
-                                }}
-                              >
-                                Back
-                              </Button>
-                            ),
-                            headerShadowVisible: false,
-                            title: 'Session',
-                            animationEnabled: false,
-                          })}
-                        />
-                        <Stack.Screen
-                          name="SetsInput"
-                          component={SetsInput}
-                          options={({ navigation }) => ({
-                            headerLeft: () => (
-                              <Button
-                                variant="unstyled"
-                                onPress={() => navigation.goBack()}
-                                _text={{
-                                  color: 'primary.500',
-                                  fontSize: 18,
-                                  fontWeight: 400,
-                                }}
-                              >
-                                Back
-                              </Button>
-                            ),
-                            headerRight: () => (
-                              <Button
-                                variant="unstyled"
-                                onPress={async () =>
-                                  await addSet({
-                                    reps: null,
-                                    weight: null,
-                                    exerciseId: exercise?.exercise.id,
-                                  })
-                                }
-                                _text={{
-                                  color: 'primary.500',
-                                  fontSize: 18,
-                                  fontWeight: 400,
-                                }}
-                              >
-                                Add set +
-                              </Button>
-                            ),
-                            headerShadowVisible: false,
-                            title: 'Sets',
-                            animationEnabled: false,
-                          })}
-                        />
-                        <Stack.Screen
-                          name="ViewWorkout"
-                          component={ViewWorkout}
-                          options={({ navigation }) => ({
-                            headerLeft: () => (
-                              <Button
-                                variant="unstyled"
-                                onPress={() => navigation.goBack()}
-                                _text={{
-                                  color: 'primary.500',
-                                  fontSize: 18,
-                                  fontWeight: 400,
-                                }}
-                              >
-                                Back
-                              </Button>
-                            ),
-                            headerShadowVisible: false,
-                            title: 'Workout',
-                            animationEnabled: false,
-                          })}
-                        />
-                      </>
-                    )}
-                  </Stack.Navigator>
-                </NavigationContainer>
-              </NativeBaseProvider>
-            </ViewWorkoutContext.Provider>
-          </UserAuthContext.Provider>
-        </ViewWorkoutTemplateContext.Provider>
-      </WorkoutSessionContext.Provider>
-    </ExerciseContext.Provider>
+              <ViewWorkoutContext.Provider
+                value={{ ...viewWorkout, setViewWorkoutData }}
+              >
+                <NativeBaseProvider theme={extendTheme(theme)}>
+                  <StatusBar style="dark" />
+                  <NavigationContainer theme={Theme}>
+                    <Stack.Navigator>
+                      {/* only show authorized screens if user is authenticated */}
+                      {userAuth.signedOut ? (
+                        <>
+                          <Stack.Screen
+                            name="Login"
+                            component={Login}
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="Signup"
+                            component={Signup}
+                            options={{ headerShown: false }}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <Stack.Screen
+                            name="Home"
+                            component={Home}
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="NewWorkoutTemplateFlow"
+                            component={NewWorkoutTemplateFlow}
+                            options={{ headerShown: false }}
+                          />
+                          <Stack.Screen
+                            name="ViewWorkoutTemplate"
+                            component={ViewWorkoutTemplate}
+                            options={({ navigation }) => ({
+                              headerLeft: () => (
+                                <Button
+                                  variant="unstyled"
+                                  onPress={() => navigation.goBack()}
+                                  _text={{
+                                    color: 'primary.500',
+                                    fontSize: 18,
+                                    fontWeight: 400,
+                                  }}
+                                >
+                                  Back
+                                </Button>
+                              ),
+                              headerShadowVisible: false,
+                              title: 'Workout Template',
+                              animationEnabled: false,
+                            })}
+                          />
+                          <Stack.Screen
+                            name="WorkoutSession"
+                            component={WorkoutSession}
+                            options={({ navigation }) => ({
+                              headerLeft: () => (
+                                <Button
+                                  variant="unstyled"
+                                  onPress={() =>
+                                    navigation.navigate('Home', {
+                                      screen: 'Workouts',
+                                    })
+                                  }
+                                  _text={{
+                                    color: 'primary.500',
+                                    fontSize: 18,
+                                    fontWeight: 400,
+                                  }}
+                                >
+                                  Back
+                                </Button>
+                              ),
+                              headerShadowVisible: false,
+                              title: 'Session',
+                              animationEnabled: false,
+                            })}
+                          />
+                          <Stack.Screen
+                            name="SetsInput"
+                            component={SetsInput}
+                            options={({ navigation }) => ({
+                              headerLeft: () => (
+                                <Button
+                                  variant="unstyled"
+                                  onPress={() => navigation.goBack()}
+                                  _text={{
+                                    color: 'primary.500',
+                                    fontSize: 18,
+                                    fontWeight: 400,
+                                  }}
+                                >
+                                  Back
+                                </Button>
+                              ),
+                              headerRight: () => (
+                                <Button
+                                  variant="unstyled"
+                                  onPress={async () =>
+                                    await addSet({
+                                      reps: null,
+                                      weight: null,
+                                      exerciseId: exercise?.exercise.id,
+                                    })
+                                  }
+                                  _text={{
+                                    color: 'primary.500',
+                                    fontSize: 18,
+                                    fontWeight: 400,
+                                  }}
+                                >
+                                  Add set +
+                                </Button>
+                              ),
+                              headerShadowVisible: false,
+                              title: 'Sets',
+                              animationEnabled: false,
+                            })}
+                          />
+                          <Stack.Screen
+                            name="ViewWorkout"
+                            component={ViewWorkout}
+                            options={({ navigation }) => ({
+                              headerLeft: () => (
+                                <Button
+                                  variant="unstyled"
+                                  onPress={() => navigation.goBack()}
+                                  _text={{
+                                    color: 'primary.500',
+                                    fontSize: 18,
+                                    fontWeight: 400,
+                                  }}
+                                >
+                                  Back
+                                </Button>
+                              ),
+                              headerShadowVisible: false,
+                              title: 'Workout',
+                              animationEnabled: false,
+                            })}
+                          />
+                        </>
+                      )}
+                    </Stack.Navigator>
+                  </NavigationContainer>
+                </NativeBaseProvider>
+              </ViewWorkoutContext.Provider>
+            </UserAuthContext.Provider>
+          </ViewWorkoutTemplateContext.Provider>
+        </WorkoutSessionContext.Provider>
+      </ExerciseContext.Provider>
+    </ApolloProvider>
   );
 }
