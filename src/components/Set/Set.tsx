@@ -13,6 +13,7 @@ const Set = ({ set, onWeightChange, onRepsChange, onDelete }: SetProps) => {
     <HStack>
       <HStack flex={1} pr={4} flexGrow={1} alignItems="center">
         <Input
+          onBlur={() => console.log('burrejfl')}
           keyboardType="number-pad"
           placeholder="reps"
           onChangeText={onRepsChange}

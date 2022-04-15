@@ -12,10 +12,6 @@ const WorkoutTemplate = ({
   onPress,
   isActive,
 }: WorkoutTemplateProps) => {
-  const viewExercises = () => {
-    console.log('view exercises');
-  };
-
   const textColor = isActive ? 'white' : 'black';
 
   return (

@@ -23,6 +23,7 @@ import SetService from './src/services/SetService';
 import ViewWorkout from './src/screens/ViewWorkout';
 import { theme } from './src/theme';
 import ViewWorkoutContext from './src/contexts/viewWorkoutContext';
+import Root from './src/components/Root';
 
 const Stack = createNativeStackNavigator();
 
@@ -140,7 +141,7 @@ export default function App() {
   }, []);
 
   return (
-    <ApolloProvider client={client}>
+    <Root>
       <ExerciseContext.Provider value={{ ...exercise, setExerciseData }}>
         <WorkoutSessionContext.Provider
           value={{
@@ -308,6 +309,6 @@ export default function App() {
           </ViewWorkoutTemplateContext.Provider>
         </WorkoutSessionContext.Provider>
       </ExerciseContext.Provider>
-    </ApolloProvider>
+    </Root>
   );
 }

@@ -1,16 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Box, Button, HStack, Text, VStack } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import Set from '../../components/Set';
 import ExerciseContext from '../../contexts/exerciseContext';
 import SetService from '../../services/SetService';
+import WorkoutSessionContext from '../../contexts/workoutSessionContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 const SetsInput = () => {
+  const { activeWorkout } = useContext<WorkoutSessionContext>(
+    WorkoutSessionContext
+  );
   const { exerciseTemplate, exercise, sets, setExerciseData } =
     useContext<ExerciseContext>(ExerciseContext);
   const handleDelete = () => {
     console.log('jfkds');
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      // activeWorkout.started
+    }, [])
+  );
+
+  console.log(activeWorkout.started);
 
   const handleWeightChange = (weight: number, idx: number) => {
     const newSetArray = [...sets];

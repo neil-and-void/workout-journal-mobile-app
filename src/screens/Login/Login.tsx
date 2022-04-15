@@ -13,9 +13,10 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as SecureStore from 'expo-secure-store';
 
-import AuthService from '../../services/AuthService';
+// import AuthService from '../../services/AuthService';
 import UserContext from '../../contexts/userContext';
-import { AxiosError } from 'axios';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../../graphql/mutations/auth';
 
 const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [formData, setData] = useState<LoginCredentials>({
@@ -23,28 +24,33 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
     password: '',
   });
   const { setUserData } = useContext(UserContext);
-  const [error, setError] = useState<null | string>(null);
+  const [errorMsg, setErrorMsg] = useState<null | string>(null);
+  const [login] = useMutation(LOGIN);
 
   /**
    * submit login credentials to get access and refresh token
    */
   const submit = async () => {
     try {
-      const { access_token, refresh_token } = await AuthService.login(formData);
-      await SecureStore.setItemAsync('accessToken', access_token);
-      await SecureStore.setItemAsync('refreshToken', refresh_token);
+      setErrorMsg(null);
+
+      const {
+        data: {
+          login: { accessToken, refreshToken },
+        },
+      } = await login({
+        variables: { email: formData.email, password: formData.password },
+      });
+
+      await SecureStore.setItemAsync('accessToken', accessToken);
+      await SecureStore.setItemAsync('refreshToken', refreshToken);
+
       setUserData({
         signedOut: false,
       });
-
       navigation.navigate('Home');
-    } catch (error) {
-      const err = error as AxiosError;
-      if (err.response) {
-        setError(err.response.data.error);
-      } else {
-        setError('Something went wrong');
-      }
+    } catch (err) {
+      setErrorMsg('Something went wrong');
     }
   };
 
@@ -57,7 +63,7 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
               Workout Journal
             </Text>
 
-            <Text color="red.500">{error}</Text>
+            {errorMsg ? <Text color="red.500">{errorMsg}</Text> : null}
 
             <Box pb={3}>
               <FormControl.Label>Email</FormControl.Label>

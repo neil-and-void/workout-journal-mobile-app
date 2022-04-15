@@ -10,16 +10,23 @@ import WorkoutTemplate from '../../components/WorkoutTemplate';
 import theme from '../../theme';
 import TemplateService from '../../services/TemplateService';
 import ViewWorkoutTemplateContext from '../../contexts/viewWorkoutTemplateContext';
-import WorkoutService from '../../services/WorkoutService';
 import WorkoutSessionContext from '../../contexts/workoutSessionContext';
-import { AxiosError } from 'axios';
+import { useQuery } from '@apollo/client';
+import { GET_WORKOUTS } from '../../graphql/queries/templates';
+import UserContext from '../../contexts/userContext';
+import WorkoutTemplateList from '../../components/WorkoutTemplateList';
 
 const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [workoutTemplates, setWorkoutTemplates] = useState<WorkoutTemplate[]>(
-    []
-  );
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const { signedOut } = useContext<UserContext>(UserContext);
+  const {
+    loading,
+    error,
+    data: workoutTemplates,
+    refetch,
+  } = useQuery(GET_WORKOUTS, {
+    variables: { filter: {} },
+  });
   const { activeWorkout, setWorkoutSessionData } =
     useContext<WorkoutSessionContext>(WorkoutSessionContext);
   const { setViewWorkoutTemplateData } = useContext<ViewWorkoutTemplateContext>(
@@ -31,49 +38,9 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
    *
    */
   const getWorkoutTemplates = async () => {
-    try {
-      setError(null);
-      setLoading(true);
-
-      // get workout templates and populate with exercise templates
-      const data = await TemplateService.getWorkoutTemplates();
-
-      const activeWorkoutData = await WorkoutService.getActiveWorkout();
-      setWorkoutSessionData(activeWorkoutData);
-
-      const workoutTemplateData = await Promise.all(
-        data.map(async (workoutTemplate: WorkoutTemplate) => {
-          const exerciseTemplates = await TemplateService.getExercisesTemplates(
-            workoutTemplate.id
-          );
-
-          return {
-            id: workoutTemplate.id,
-            name: workoutTemplate.name,
-            exerciseTemplates: exerciseTemplates,
-          };
-        })
-      );
-
-      setLoading(false);
-
-      setWorkoutTemplates(workoutTemplateData);
-    } catch (err) {
-      const error = err as AxiosError;
-      setError('Could not fetch workout templates');
-    }
+    // TODO: increment pagination here
+    refetch();
   };
-
-  /**
-   * fetch workout templates when screen is focused
-   */
-  useFocusEffect(
-    useCallback(() => {
-      if (workoutTemplates.length === 0) {
-        getWorkoutTemplates();
-      }
-    }, [])
-  );
 
   /**
    * navigate to screen to view workout template
@@ -93,7 +60,9 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
     try {
       await TemplateService.deleteWorkoutTemplate(workoutTemplateId);
       await getWorkoutTemplates();
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleWorkoutTemplateClick = (
@@ -106,6 +75,8 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
       viewWorkoutTemplate(workoutTemplate);
     }
   };
+
+  console.log(error);
 
   return (
     <Box h={Dimensions.get('window').height - tabBarHeight} safeArea>
@@ -126,7 +97,7 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
 
         {error ? (
           <Text textAlign="center" color="red.500">
-            {error}
+            {error.message}
           </Text>
         ) : null}
 
@@ -137,41 +108,17 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
               paddingX: 6,
             }}
             refreshControl={
-              <RefreshControl
-                refreshing={loading}
-                onRefresh={getWorkoutTemplates}
-              />
+              <RefreshControl refreshing={loading} onRefresh={() => {}} />
             }
           >
-            {workoutTemplates.map((workoutTemplate, idx) => (
-              <Box pb={2} key={idx}>
-                <Swipeable
-                  renderRightActions={() => (
-                    <Button
-                      onPress={() => handleDelete(workoutTemplate.id)}
-                      borderRadius={16}
-                      backgroundColor="red.500"
-                    >
-                      Delete
-                    </Button>
-                  )}
-                >
-                  <WorkoutTemplate
-                    workout={workoutTemplate}
-                    isActive={
-                      activeWorkout?.workout_template_id === workoutTemplate.id
-                    }
-                    onPress={() =>
-                      handleWorkoutTemplateClick(
-                        activeWorkout?.workout_template_id ===
-                          workoutTemplate.id,
-                        workoutTemplate
-                      )
-                    }
-                  />
-                </Swipeable>
-              </Box>
-            ))}
+            {loading ? null : (
+              <WorkoutTemplateList
+                handleDelete={handleDelete}
+                data={workoutTemplates}
+                activeWorkout={activeWorkout}
+                handleWorkoutTemplateClick={handleWorkoutTemplateClick}
+              />
+            )}
           </ScrollView>
         </Box>
       </VStack>

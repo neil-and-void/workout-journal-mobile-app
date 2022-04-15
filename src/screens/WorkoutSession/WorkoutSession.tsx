@@ -47,6 +47,7 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const getWorkoutData = async () => {
     setLoading(true);
     const workoutData = await WorkoutService.getActiveWorkout();
+    console.log(workoutData);
     setWorkoutSessionData(workoutData);
     setLoading(false);
   };

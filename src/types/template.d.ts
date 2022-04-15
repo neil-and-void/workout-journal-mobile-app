@@ -1,3 +1,7 @@
+interface WorkoutTemplates {
+  workoutTemplates: WorkoutTemplate[];
+}
+
 interface WorkoutTemplate {
   id: number;
   name: string;
