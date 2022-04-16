@@ -8,19 +8,22 @@ import NewExerciseTemplates from '../NewExerciseTemplates';
 import NewWorkoutTemplateContext from '../../contexts/newWorkoutTemplateContext';
 import theme from '../../theme';
 import WorkoutTemplateFlowErrorsContext from '../../contexts/workoutTemplateFlowErrorsContext';
-import { createWorkoutTemplate } from '../../services/TemplateService';
+import { useMutation } from '@apollo/client';
+import { CREATE_WORKOUT_TEMPLATE } from '../../graphql/mutations/templates';
 
 const Stack = createNativeStackNavigator();
 
 const NewWorkoutTemplateFlow = ({
   navigation,
 }: NativeStackScreenProps<any, any>) => {
+  const [createWorkoutTemplate, { data, loading, error: err }] = useMutation(
+    CREATE_WORKOUT_TEMPLATE
+  );
   const [workoutTemplate, setWorkoutTemplate] = useState<WorkoutTemplate>({
     name: '',
     exerciseTemplates: [],
   });
   const [error, setError] = useState<string | null>(null);
-
   /**
    * callback to update workout template
    *
@@ -78,7 +81,9 @@ const NewWorkoutTemplateFlow = ({
     try {
       // clear error
       setError(null);
-      await createWorkoutTemplate(workoutTemplate);
+      await createWorkoutTemplate({
+        variables: { workoutTemplateData: workoutTemplate },
+      });
       navigation.navigate('Home', { screen: 'Workouts' });
     } catch (err) {
       setError('Something went wrong');

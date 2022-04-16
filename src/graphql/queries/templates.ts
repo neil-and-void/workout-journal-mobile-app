@@ -6,6 +6,9 @@ export const GET_WORKOUTS = gql`
       name
       exerciseTemplates {
         id
+        name
+        reps
+        sets
       }
     }
   }

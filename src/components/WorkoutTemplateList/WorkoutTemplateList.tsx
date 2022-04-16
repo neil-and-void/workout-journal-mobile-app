@@ -39,7 +39,7 @@ const WorkoutTemplateList = ({
                 workout={workoutTemplate}
                 isActive={false} // TODO: change the way activeness is defined
                 onPress={() =>
-                  handleWorkoutTemplateClick(true, workoutTemplate)
+                  handleWorkoutTemplateClick(false, workoutTemplate)
                 }
               />
             </Swipeable>

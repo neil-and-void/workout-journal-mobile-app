@@ -22,7 +22,7 @@ const NewWorkoutTemplateName = () => {
       <Box alignItems="center">
         <FormControl isInvalid={Boolean(error)}>
           <Text pt={8} fontSize={32} fontWeight={600} textAlign="center">
-            Workout Name
+            Routine Name
           </Text>
 
           <Input
