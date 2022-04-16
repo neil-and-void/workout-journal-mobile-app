@@ -106,7 +106,10 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
               paddingX: 6,
             }}
             refreshControl={
-              <RefreshControl refreshing={loading} onRefresh={() => {}} />
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => refetch()}
+              />
             }
           >
             {loading ? null : (
