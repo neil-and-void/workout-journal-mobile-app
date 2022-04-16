@@ -22,26 +22,14 @@ const Root = ({ children }: RootProps) => {
     uri: 'http://192.168.1.72:4000/graphql',
   });
 
-  let token: string | null;
-  const authLink = setContext((_, { headers }) => {
-    if (token) {
-      return {
-        headers: {
-          ...headers,
-          authorization: token,
-        },
-      };
-    }
-
-    return SecureStore.getItemAsync('accessToken').then((accessToken) => {
-      token = accessToken;
-      return {
-        headers: {
-          ...headers,
-          'x-access-token': accessToken,
-        },
-      };
-    });
+  const authLink = setContext(async (_, { headers }) => {
+    const accessToken = await SecureStore.getItemAsync('accessToken');
+    return {
+      headers: {
+        ...headers,
+        'x-access-token': accessToken,
+      },
+    };
   });
 
   const clearTokens = async () => {
@@ -69,7 +57,7 @@ const Root = ({ children }: RootProps) => {
     <ApolloProvider
       client={
         new ApolloClient({
-          link: ApolloLink.from([authLink, errorLink, httpLink]),
+          link: ApolloLink.from([errorLink, authLink, httpLink]),
           cache: new InMemoryCache(),
         })
       }
