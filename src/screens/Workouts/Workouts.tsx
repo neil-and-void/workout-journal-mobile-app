@@ -61,7 +61,7 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
       await TemplateService.deleteWorkoutTemplate(workoutTemplateId);
       await getWorkoutTemplates();
     } catch (err) {
-      console.log(err);
+      // console.log('');
     }
   };
 
@@ -75,8 +75,6 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
       viewWorkoutTemplate(workoutTemplate);
     }
   };
-
-  console.log(error);
 
   return (
     <Box h={Dimensions.get('window').height - tabBarHeight} safeArea>

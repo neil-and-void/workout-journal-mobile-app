@@ -20,7 +20,6 @@ const WorkoutTemplateList = ({
   handleWorkoutTemplateClick,
 }: WorkoutTemplateListProps) => {
   if (data) {
-    console.log('shdfksdj', data);
     return (
       <>
         {data.workoutTemplates.map((workoutTemplate, idx) => (

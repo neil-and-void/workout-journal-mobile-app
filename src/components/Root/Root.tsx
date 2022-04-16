@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import { ApolloProvider } from '@apollo/client';
 
-import { client } from '../../graphql/client';
 import UserContext from '../../contexts/userContext';
-
 import {
   ApolloClient,
   ApolloLink,
@@ -46,16 +44,24 @@ const Root = ({ children }: RootProps) => {
     });
   });
 
+  const clearTokens = async () => {
+    await new Promise(() => {
+      SecureStore.setItemAsync('accessToken', '');
+      SecureStore.setItemAsync('refreshToken', '');
+    });
+  };
+
   const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors)
-      graphQLErrors.forEach(({ message, locations, path }) =>
+    if (graphQLErrors) {
+      graphQLErrors.forEach(({ message, locations, path }) => {
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-        )
-      );
-    if (networkError) {
-      console.log(`[Network error]: ${networkError}`);
-      setUserData({ signedOut: true });
+        );
+        if (message === 'Unauthenticated') {
+          setUserData({ signedOut: true });
+          clearTokens();
+        }
+      });
     }
   });
 

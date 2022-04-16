@@ -5,9 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeBaseProvider, extendTheme, Button } from 'native-base';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
-import { ApolloProvider } from '@apollo/client';
 
-import { client } from './src/graphql/client';
 import Signup from './src/screens/Signup';
 import Login from './src/screens/Login';
 import Home from './src/screens/Home';
@@ -66,6 +64,7 @@ export default function App() {
    */
   const setUserAuthData = (user: User) => {
     setUserAuth(user);
+    console.log(user);
   };
 
   /**
@@ -126,39 +125,34 @@ export default function App() {
       accessToken = await SecureStore.getItemAsync('accessToken');
       refreshToken = await SecureStore.getItemAsync('refreshToken');
 
-      if (accessToken === null || refreshToken === null) {
-        setUserAuth({
-          signedOut: true,
-        });
-      } else {
-        setUserAuth({
-          signedOut: false,
-        });
-      }
+      // user signed out based on the state of tokens
+      setUserAuth({
+        signedOut: !(Boolean(refreshToken) && Boolean(accessToken)),
+      });
     };
 
     bootstrapAsync();
   }, []);
 
   return (
-    <Root>
-      <ExerciseContext.Provider value={{ ...exercise, setExerciseData }}>
-        <WorkoutSessionContext.Provider
-          value={{
-            ...workoutSession,
-            setWorkoutSessionData: setWorkoutSessionData,
-          }}
+    <ExerciseContext.Provider value={{ ...exercise, setExerciseData }}>
+      <WorkoutSessionContext.Provider
+        value={{
+          ...workoutSession,
+          setWorkoutSessionData: setWorkoutSessionData,
+        }}
+      >
+        <ViewWorkoutTemplateContext.Provider
+          value={{ ...viewWorkoutTemplate, setViewWorkoutTemplateData }}
         >
-          <ViewWorkoutTemplateContext.Provider
-            value={{ ...viewWorkoutTemplate, setViewWorkoutTemplateData }}
+          <UserAuthContext.Provider
+            value={{ ...userAuth, setUserData: setUserAuthData }}
           >
-            <UserAuthContext.Provider
-              value={{ ...userAuth, setUserData: setUserAuthData }}
+            <ViewWorkoutContext.Provider
+              value={{ ...viewWorkout, setViewWorkoutData }}
             >
-              <ViewWorkoutContext.Provider
-                value={{ ...viewWorkout, setViewWorkoutData }}
-              >
-                <NativeBaseProvider theme={extendTheme(theme)}>
+              <NativeBaseProvider theme={extendTheme(theme)}>
+                <Root>
                   <StatusBar style="dark" />
                   <NavigationContainer theme={Theme}>
                     <Stack.Navigator>
@@ -303,12 +297,12 @@ export default function App() {
                       )}
                     </Stack.Navigator>
                   </NavigationContainer>
-                </NativeBaseProvider>
-              </ViewWorkoutContext.Provider>
-            </UserAuthContext.Provider>
-          </ViewWorkoutTemplateContext.Provider>
-        </WorkoutSessionContext.Provider>
-      </ExerciseContext.Provider>
-    </Root>
+                </Root>
+              </NativeBaseProvider>
+            </ViewWorkoutContext.Provider>
+          </UserAuthContext.Provider>
+        </ViewWorkoutTemplateContext.Provider>
+      </WorkoutSessionContext.Provider>
+    </ExerciseContext.Provider>
   );
 }

@@ -23,8 +23,6 @@ const SetsInput = () => {
     }, [])
   );
 
-  console.log(activeWorkout.started);
-
   const handleWeightChange = (weight: number, idx: number) => {
     const newSetArray = [...sets];
     const newSet = { ...newSetArray[idx], weight: Number(weight) };
