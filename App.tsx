@@ -11,7 +11,7 @@ import Login from './src/screens/Login';
 import Home from './src/screens/Home';
 import NewWorkoutTemplateFlow from './src/screens/NewWorkoutTemplateFlow';
 import ViewWorkoutTemplate from './src/screens/ViewWorkoutTemplate';
-import WorkoutSession from './src/screens/WorkoutSession/WorkoutSession';
+import Session from './src/screens/Session';
 import SetsInput from './src/screens/SetsInput';
 import UserAuthContext from './src/contexts/userContext';
 import WorkoutSessionContext from './src/contexts/workoutSessionContext';
@@ -200,13 +200,13 @@ export default function App() {
                                 </Button>
                               ),
                               headerShadowVisible: false,
-                              title: 'Workout Template',
+                              title: 'Routine',
                               animationEnabled: false,
                             })}
                           />
                           <Stack.Screen
-                            name="WorkoutSession"
-                            component={WorkoutSession}
+                            name="Session"
+                            component={Session}
                             options={({ navigation }) => ({
                               headerLeft: () => (
                                 <Button

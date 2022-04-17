@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Box, FormControl, Input, Text } from 'native-base';
 import NewWorkoutTemplateContext from '../../contexts/newWorkoutTemplateContext';
 import WorkoutTemplateFlowErrorsContext from '../../contexts/workoutTemplateFlowErrorsContext';

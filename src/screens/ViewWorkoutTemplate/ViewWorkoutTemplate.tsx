@@ -1,23 +1,25 @@
 import React, { useContext } from 'react';
-import { VStack, Box, Button, ScrollView, Text } from 'native-base';
+import { VStack, Box, Button, ScrollView, Text, Spinner } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import ViewWorkoutTemplateContext from '../../contexts/viewWorkoutTemplateContext';
 import Exercise from '../../components/ExerciseTemplate';
-import WorkoutService from '../../services/WorkoutService';
+import { useMutation } from '@apollo/client';
+import { START_WORKOUT } from '../../graphql/mutations/workouts';
 
 const ViewWorkoutTemplate = ({
   navigation,
 }: NativeStackScreenProps<any, any>) => {
   const { name, exerciseTemplates, id } =
     useContext<ViewWorkoutTemplateContext>(ViewWorkoutTemplateContext);
+  const [startWorkout, { loading }] = useMutation(START_WORKOUT);
 
   /**
    * start a workout with workout template equal to the one above
    */
   const startWorkoutSession = async () => {
-    await WorkoutService.startNewWorkout(id);
-    navigation.navigate('WorkoutSession');
+    await startWorkout({ variables: { workoutTemplateId: id } });
+    navigation.navigate('Session');
   };
 
   return (
@@ -26,7 +28,9 @@ const ViewWorkoutTemplate = ({
         <Text textAlign="center" fontWeight={700} fontSize={36} pb={8}>
           {name}
         </Text>
-        <Button onPress={startWorkoutSession}>Start</Button>
+        <Button onPress={startWorkoutSession}>
+          {loading ? <Spinner color={'white'} /> : 'Start'}
+        </Button>
       </Box>
       <ScrollView flex={1}>
         {exerciseTemplates.map((exerciseTemplate, idx) => (

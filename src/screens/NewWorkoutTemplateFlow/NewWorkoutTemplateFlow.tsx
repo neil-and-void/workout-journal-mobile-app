@@ -24,6 +24,7 @@ const NewWorkoutTemplateFlow = ({
     exerciseTemplates: [],
   });
   const [error, setError] = useState<string | null>(null);
+
   /**
    * callback to update workout template
    *

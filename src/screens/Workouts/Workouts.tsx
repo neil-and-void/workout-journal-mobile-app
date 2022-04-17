@@ -70,7 +70,7 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
     workoutTemplate: WorkoutTemplate
   ) => {
     if (isActiveWorkout) {
-      navigation.navigate('WorkoutSession');
+      navigation.navigate('Session');
     } else {
       viewWorkoutTemplate(workoutTemplate);
     }
