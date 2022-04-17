@@ -7,13 +7,10 @@ import {
   Text,
   Icon,
   ScrollView,
-  Spinner,
 } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-import dayjs from 'dayjs';
 
-import viewWorkoutContext from '../../contexts/viewWorkoutTemplateContext';
 import WorkoutSessionContext from '../../contexts/workoutSessionContext';
 import Exercise from '../../components/Exercise';
 import ExerciseContext from '../../contexts/exerciseContext';
@@ -21,7 +18,7 @@ import WorkoutService from '../../services/WorkoutService';
 import { useFocusEffect } from '@react-navigation/native';
 import { RefreshControl } from 'react-native';
 
-const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
+const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const { workoutData, setWorkoutSessionData } =
     useContext<WorkoutSessionContext>(WorkoutSessionContext);
   const { setExerciseData } = useContext<ExerciseContext>(ExerciseContext);
@@ -139,4 +136,4 @@ const WorkoutSession = ({ navigation }: NativeStackScreenProps<any, any>) => {
   );
 };
 
-export default WorkoutSession;
+export default Session;
