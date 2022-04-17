@@ -7,6 +7,7 @@ import {
   Text,
   Icon,
   ScrollView,
+  Spinner,
 } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,13 +18,19 @@ import ExerciseContext from '../../contexts/exerciseContext';
 import WorkoutService from '../../services/WorkoutService';
 import { useFocusEffect } from '@react-navigation/native';
 import { RefreshControl } from 'react-native';
+import { useQuery } from '@apollo/client';
+import { GET_WORKOUT } from '../../graphql/queries/workouts';
 
 const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const { workoutData, setWorkoutSessionData } =
-    useContext<WorkoutSessionContext>(WorkoutSessionContext);
   const { setExerciseData } = useContext<ExerciseContext>(ExerciseContext);
   const [minutes, setMinutes] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const {
+    data: workoutData,
+    loading,
+    error,
+  } = useQuery(GET_WORKOUT, {
+    variables: { filter: { active: true } },
+  });
 
   useEffect(() => {
     // const timer = setInterval(() => {
@@ -34,19 +41,6 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
     //   clearInterval(timer);
     // };
   }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      getWorkoutData();
-    }, [])
-  );
-
-  const getWorkoutData = async () => {
-    setLoading(true);
-    const workoutData = await WorkoutService.getActiveWorkout();
-    setWorkoutSessionData(workoutData);
-    setLoading(false);
-  };
 
   /**
    * save end time to database and navigate back to workouts screen
@@ -83,6 +77,16 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
     return String(time).padStart(2, '0');
   };
 
+  if (loading) {
+    return (
+      <VStack h="100%">
+        <HStack alignItems="center" justifyContent="space-between">
+          <Spinner size="lg" />
+        </HStack>
+      </VStack>
+    );
+  }
+
   return (
     <VStack h="100%">
       <HStack px={4} pb={4} alignItems="center" justifyContent="space-between">
@@ -101,10 +105,7 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
               <Text fontSize={16} color="#fff">
                 Finish{' '}
               </Text>
-              <Icon
-                style={{ color: '#fff' }}
-                as={<Ionicons name="checkmark-outline" />}
-              />
+              <Icon color="white" as={<Ionicons name="checkmark-outline" />} />
             </HStack>
           </Button>
         </Box>
@@ -113,10 +114,10 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
         flex={1}
         px={4}
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={getWorkoutData} />
+          <RefreshControl refreshing={loading} onRefresh={() => {}} />
         }
       >
-        {workoutData.map((exercise, idx) => (
+        {workoutData.workout[0].exercises.map((exercise, idx) => (
           <Box pb={4} key={idx}>
             <Exercise
               exercise={exercise.exerciseTemplate}
