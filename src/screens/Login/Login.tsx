@@ -9,6 +9,7 @@ import {
   VStack,
   Text,
   Flex,
+  Spinner,
 } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as SecureStore from 'expo-secure-store';
@@ -25,7 +26,7 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
   });
   const { setUserData } = useContext(UserContext);
   const [errorMsg, setErrorMsg] = useState<null | string>(null);
-  const [login] = useMutation(LOGIN);
+  const [login, { loading }] = useMutation(LOGIN);
 
   /**
    * submit login credentials to get access and refresh token
@@ -93,7 +94,7 @@ const Login = ({ navigation }: NativeStackScreenProps<any, any>) => {
           </FormControl>
 
           <Button size="lg" py={2} onPress={submit}>
-            Login
+            {loading ? <Spinner color="white" /> : 'Login'}
           </Button>
 
           <Flex flexDirection="row" justify="center">
