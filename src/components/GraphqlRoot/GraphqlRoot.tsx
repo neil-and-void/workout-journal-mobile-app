@@ -16,7 +16,7 @@ interface RootProps {
   children: React.ReactNode;
 }
 
-const Root = ({ children }: RootProps) => {
+const GraphqlRoot = ({ children }: RootProps) => {
   const { setUserData } = useContext<UserContext>(UserContext);
   const httpLink = createHttpLink({
     uri: 'http://192.168.1.72:4000/graphql',
@@ -67,4 +67,4 @@ const Root = ({ children }: RootProps) => {
   );
 };
 
-export default Root;
+export default GraphqlRoot;

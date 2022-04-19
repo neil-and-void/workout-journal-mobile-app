@@ -21,7 +21,7 @@ import SetService from './src/services/SetService';
 import ViewWorkout from './src/screens/ViewWorkout';
 import { theme } from './src/theme';
 import ViewWorkoutContext from './src/contexts/viewWorkoutContext';
-import Root from './src/components/Root';
+import GraphqlRoot from './src/components/GraphqlRoot';
 
 const Stack = createNativeStackNavigator();
 
@@ -152,7 +152,7 @@ export default function App() {
               value={{ ...viewWorkout, setViewWorkoutData }}
             >
               <NativeBaseProvider theme={extendTheme(theme)}>
-                <Root>
+                <GraphqlRoot>
                   <StatusBar style="dark" />
                   <NavigationContainer theme={Theme}>
                     <Stack.Navigator>
@@ -297,7 +297,7 @@ export default function App() {
                       )}
                     </Stack.Navigator>
                   </NavigationContainer>
-                </Root>
+                </GraphqlRoot>
               </NativeBaseProvider>
             </ViewWorkoutContext.Provider>
           </UserAuthContext.Provider>
