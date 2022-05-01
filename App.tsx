@@ -48,8 +48,8 @@ export default function App() {
     workoutData: [],
   });
   const [exercise, setExercise] = useState<ExerciseSession>({
+    id: null,
     exerciseTemplate: null,
-    exercise: null,
     sets: [],
   });
   const [viewWorkout, setViewWorkout] = useState<WorkoutSession>({
@@ -87,12 +87,12 @@ export default function App() {
    * @param exerciseTemplate exercise template of the current exercise being done
    */
   const setExerciseData = (
-    exercise: Exercise,
+    id: number,
     exerciseTemplate: ExerciseTemplate,
     sets: ExerciseSet[]
   ) => {
     setExercise({
-      exercise,
+      id,
       exerciseTemplate,
       sets,
     });

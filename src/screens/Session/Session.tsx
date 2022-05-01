@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -12,7 +12,6 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
-import WorkoutSessionContext from '../../contexts/workoutSessionContext';
 import Exercise from '../../components/Exercise';
 import ExerciseContext from '../../contexts/exerciseContext';
 import WorkoutService from '../../services/WorkoutService';
@@ -59,12 +58,12 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
    * @param set list of sets
    */
   const doExercise = (
+    id: number,
     exerciseTemplate: ExerciseTemplate,
-    exercise: Exercise,
     set: ExerciseSet[]
   ) => {
     navigation.navigate('SetsInput');
-    setExerciseData(exercise, exerciseTemplate, set);
+    setExerciseData(id, exerciseTemplate, set);
   };
 
   /**
@@ -79,13 +78,13 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
 
   if (loading) {
     return (
-      <VStack h="100%">
-        <HStack alignItems="center" justifyContent="space-between">
-          <Spinner size="lg" />
-        </HStack>
+      <VStack h="100%" justifyContent="center">
+        <Spinner size="lg" />
       </VStack>
     );
   }
+
+  console.log(workoutData);
 
   return (
     <VStack h="100%">
@@ -123,8 +122,8 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
               exercise={exercise.exerciseTemplate}
               onPress={() =>
                 doExercise(
+                  exercise.id,
                   exercise.exerciseTemplate,
-                  exercise.exercise,
                   exercise.sets
                 )
               }

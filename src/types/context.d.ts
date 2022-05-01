@@ -15,12 +15,23 @@ interface UserContext {
   setUserData: (user: User) => void;
 }
 
-interface ExerciseContext {
+interface ExerciseData {
   exerciseTemplate: ExerciseTemplate;
-  exercise: Exercise;
+  sets: ExerciseSet[];
+}
+
+interface WorkoutData {
+  id: number;
+  exercises: ExerciseData[];
+}
+
+interface ExerciseContext {
+  workout: WorkoutData[];
+  exerciseTemplate: ExerciseTemplate;
+  id: number;
   sets: ExerciseSet[];
   setExerciseData: (
-    exercise: Exercise,
+    id: number,
     exerciseTemplate: ExerciseTemplate,
     sets: Sets[]
   ) => void;

@@ -5,6 +5,7 @@ export const GET_WORKOUT = gql`
     workout(filter: $filter) {
       id
       exercises {
+        id
         exerciseTemplate {
           name
           sets
