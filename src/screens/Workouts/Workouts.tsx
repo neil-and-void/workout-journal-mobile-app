@@ -61,7 +61,7 @@ const Workouts = ({ navigation }: NativeStackScreenProps<any, any>) => {
       await TemplateService.deleteWorkoutTemplate(workoutTemplateId);
       await getWorkoutTemplates();
     } catch (err) {
-      // console.log('');
+
     }
   };
 

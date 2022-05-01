@@ -84,8 +84,6 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
     );
   }
 
-  console.log(workoutData);
-
   return (
     <VStack h="100%">
       <HStack px={4} pb={4} alignItems="center" justifyContent="space-between">

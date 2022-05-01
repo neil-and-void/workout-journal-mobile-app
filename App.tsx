@@ -64,7 +64,6 @@ export default function App() {
    */
   const setUserAuthData = (user: User) => {
     setUserAuth(user);
-    console.log(user);
   };
 
   /**

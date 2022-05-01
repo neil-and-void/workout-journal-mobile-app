@@ -27,7 +27,6 @@ const SetsInputForm = ({ exerciseId }: SetsInputFormProps) => {
         reps: formData.reps,
       },
     });
-    console.log(res);
   };
 
   return (

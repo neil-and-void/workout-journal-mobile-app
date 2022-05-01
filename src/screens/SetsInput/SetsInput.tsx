@@ -21,9 +21,7 @@ const SetsInput = () => {
     reps: null,
   });
 
-  const handleDelete = () => {
-    console.log('jfkds');
-  };
+  const handleDelete = () => {};
 
   useFocusEffect(
     useCallback(() => {
@@ -45,11 +43,9 @@ const SetsInput = () => {
     const newSet = { ...sets[idx], reps: Number(reps) };
     newSetArray.splice(idx, 1, newSet);
     setExerciseData(exercise, exerciseTemplate, newSetArray);
-    const { weight, id } = newSet;
+    const { weight, id } = newSt;
     SetService.updateSet(id, reps, weight);
   };
-
-  console.log(exerciseTemplate, id, sets);
 
   return (
     <VStack px={4} h="100%" safeAreaBottom>
