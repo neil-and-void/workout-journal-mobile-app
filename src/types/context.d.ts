@@ -25,16 +25,8 @@ interface WorkoutData {
   exercises: ExerciseData[];
 }
 
-interface ExerciseContext {
-  workout: WorkoutData[];
-  exerciseTemplate: ExerciseTemplate;
-  id: number;
-  sets: ExerciseSet[];
-  setExerciseData: (
-    id: number,
-    exerciseTemplate: ExerciseTemplate,
-    sets: Sets[]
-  ) => void;
+interface ExerciseContext extends ExerciseSession {
+  setExerciseData: (exerciseData: ExerciseSession) => void;
 }
 
 interface ViewWorkoutContext {

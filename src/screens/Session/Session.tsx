@@ -60,10 +60,10 @@ const Session = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const doExercise = (
     id: number,
     exerciseTemplate: ExerciseTemplate,
-    set: ExerciseSet[]
+    sets: ExerciseSet[]
   ) => {
     navigation.navigate('SetsInput');
-    setExerciseData(id, exerciseTemplate, set);
+    setExerciseData({ id, exerciseTemplate, sets });
   };
 
   /**

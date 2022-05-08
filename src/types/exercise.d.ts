@@ -5,7 +5,7 @@ interface Exercise {
 }
 
 interface ExerciseSession {
+  id?: number | null;
   exerciseTemplate: ExerciseTemplate | null;
-  exercise: Exercise | null;
   sets: ExerciseSet[];
 }

@@ -14,12 +14,13 @@ const SetsInput = () => {
   const { activeWorkout } = useContext<WorkoutSessionContext>(
     WorkoutSessionContext
   );
-  const { exerciseTemplate, id, sets, setExerciseData } =
+  const { id, sets, exerciseTemplate, setExerciseData } =
     useContext<ExerciseContext>(ExerciseContext);
   const [formData, setData] = useState({
     weight: null,
     reps: null,
   });
+  // TODO: query for set data the last time this exercise was used
 
   const handleDelete = () => {};
 
@@ -29,31 +30,21 @@ const SetsInput = () => {
     }, [])
   );
 
-  const handleWeightChange = (weight: number, idx: number) => {
-    const newSetArray = [...sets];
-    const newSet = { ...newSetArray[idx], weight: Number(weight) };
-    newSetArray.splice(idx, 1, newSet);
-    setExerciseData(exercise, exerciseTemplate, newSetArray);
-    const { reps, id } = newSet;
-    SetService.updateSet(id, reps, weight);
-  };
+  const handleWeightChange = (weight: number, idx: number) => {};
 
-  const handleRepsChange = (reps: number, idx: number) => {
-    const newSetArray = [...sets];
-    const newSet = { ...sets[idx], reps: Number(reps) };
-    newSetArray.splice(idx, 1, newSet);
-    setExerciseData(exercise, exerciseTemplate, newSetArray);
-    const { weight, id } = newSt;
-    SetService.updateSet(id, reps, weight);
+  const handleRepsChange = (reps: number, idx: number) => {};
+
+  const appendSetData = (exerciseSet: ExerciseSet) => {
+    setExerciseData({ id, sets: [...sets, exerciseSet], exerciseTemplate });
   };
 
   return (
     <VStack px={4} h="100%" safeAreaBottom>
       <Text fontSize={48} fontWeight="500">
-        {exerciseTemplate.name}
+        {exerciseTemplate?.name}
       </Text>
       <Box h="100%">
-        <SetsInputForm exerciseId={id} />
+        <SetsInputForm id={Number(id)} onSubmit={appendSetData} />
         {sets.length === 0 ? (
           <HStack justifyContent="center">
             <Text fontSize="lg" color="muted.400">

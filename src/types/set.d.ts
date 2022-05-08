@@ -1,5 +1,5 @@
 interface ExerciseSet {
-  exerciseId?: number;
+  id?: string;
   weight: number;
   reps: number;
 }

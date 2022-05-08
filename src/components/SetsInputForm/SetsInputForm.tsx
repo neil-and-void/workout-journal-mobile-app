@@ -9,10 +9,11 @@ interface SetsInput {
 }
 
 interface SetsInputFormProps {
-  exerciseId: number;
+  id: number;
+  onSubmit: (exerciseSet: ExerciseSet) => void;
 }
 
-const SetsInputForm = ({ exerciseId }: SetsInputFormProps) => {
+const SetsInputForm = ({ id, onSubmit }: SetsInputFormProps) => {
   const [formData, setData] = useState<SetsInput>({
     weight: null,
     reps: null,
@@ -20,13 +21,16 @@ const SetsInputForm = ({ exerciseId }: SetsInputFormProps) => {
   const [createSet] = useMutation(CREATE_SET);
 
   const submitForm = async () => {
-    const res = await createSet({
+    const { data } = await createSet({
       variables: {
-        exerciseId: exerciseId,
-        weight: formData.weight,
-        reps: formData.reps,
+        set: {
+          exerciseId: id,
+          weight: formData.weight,
+          reps: formData.reps,
+        },
       },
     });
+    onSubmit(data.createSet);
   };
 
   return (

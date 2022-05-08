@@ -22,6 +22,7 @@ import ViewWorkout from './src/screens/ViewWorkout';
 import { theme } from './src/theme';
 import ViewWorkoutContext from './src/contexts/viewWorkoutContext';
 import GraphqlRoot from './src/components/GraphqlRoot';
+import { convertAbsoluteToRem } from 'native-base/lib/typescript/theme/tools';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,7 @@ export default function App() {
   const [exercise, setExercise] = useState<ExerciseSession>({
     id: null,
     exerciseTemplate: null,
+    exercise: null,
     sets: [],
   });
   const [viewWorkout, setViewWorkout] = useState<WorkoutSession>({
@@ -81,20 +83,9 @@ export default function App() {
 
   /**
    * callback function to set the exercise id and exercise template in the current exercise session
-   *
-   * @param exerciseId id of the current exercise being done
-   * @param exerciseTemplate exercise template of the current exercise being done
    */
-  const setExerciseData = (
-    id: number,
-    exerciseTemplate: ExerciseTemplate,
-    sets: ExerciseSet[]
-  ) => {
-    setExercise({
-      id,
-      exerciseTemplate,
-      sets,
-    });
+  const setExerciseData = (exerciseData: ExerciseSession) => {
+    setExercise({ ...exerciseData });
   };
 
   /**
