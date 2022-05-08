@@ -18,7 +18,7 @@ const SetsInputForm = ({ id, onSubmit }: SetsInputFormProps) => {
     weight: null,
     reps: null,
   });
-  const [createSet] = useMutation(CREATE_SET);
+  const [createSet, { loading }] = useMutation(CREATE_SET);
 
   const submitForm = async () => {
     const { data } = await createSet({
@@ -64,7 +64,9 @@ const SetsInputForm = ({ id, onSubmit }: SetsInputFormProps) => {
           placeholder="reps"
         />
 
-        <Button onPress={() => submitForm()}>Add Set +</Button>
+        <Button disabled={loading} onPress={() => submitForm()}>
+          Add Set +
+        </Button>
       </HStack>
     </FormControl>
   );

@@ -7,7 +7,7 @@ import SetService from '../../services/SetService';
 import WorkoutSessionContext from '../../contexts/workoutSessionContext';
 import { useFocusEffect } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
-import { CREATE_SET } from '../../graphql/mutations/sets';
+import { CREATE_SET, DELETE_SET } from '../../graphql/mutations/sets';
 import SetsInputForm from '../../components/SetsInputForm';
 
 const SetsInput = () => {
@@ -20,9 +20,9 @@ const SetsInput = () => {
     weight: null,
     reps: null,
   });
-  // TODO: query for set data the last time this exercise was used
+  const [deleteSet, { loading }] = useMutation(DELETE_SET);
 
-  const handleDelete = () => {};
+  // TODO: query for set data the last time this exercise was used
 
   useFocusEffect(
     useCallback(() => {
@@ -36,6 +36,15 @@ const SetsInput = () => {
 
   const appendSetData = (exerciseSet: ExerciseSet) => {
     setExerciseData({ id, sets: [...sets, exerciseSet], exerciseTemplate });
+  };
+
+  const handleDelete = async (exerciseId: String) => {
+    deleteSet({ variables: { id: exerciseId } }).then();
+    const newExerciseSet = sets.filter(
+      (exerciseSet) => exerciseSet.id !== exerciseId
+    );
+    console.log(newExerciseSet);
+    setExerciseData({ id, sets: [...newExerciseSet], exerciseTemplate });
   };
 
   return (
@@ -61,7 +70,7 @@ const SetsInput = () => {
                   onWeightChange={(weight) =>
                     handleWeightChange(Number(weight), idx)
                   }
-                  onDelete={handleDelete}
+                  onDelete={() => handleDelete(set.id)}
                 />
               </Box>
             ))}

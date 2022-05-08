@@ -5,7 +5,7 @@ interface SetProps {
   set: ExerciseSet;
   onWeightChange: (weight: string) => void;
   onRepsChange: (reps: string) => void;
-  onDelete: () => void;
+  onDelete: (id: String) => void;
 }
 
 const Set = ({ set, onWeightChange, onRepsChange, onDelete }: SetProps) => {
@@ -48,7 +48,7 @@ const Set = ({ set, onWeightChange, onRepsChange, onDelete }: SetProps) => {
         variant="unstyled"
         _text={{ color: 'red.500' }}
         pr={4}
-        onPress={onDelete}
+        onPress={() => onDelete(set.id)}
       >
         remove
       </Button>
